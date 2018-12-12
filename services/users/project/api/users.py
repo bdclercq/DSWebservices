@@ -69,6 +69,35 @@ def get_single_user(user_id):
         return jsonify(response_object), 404
 
 
+@users_blueprint.route('/users/<email>,<passwd>', methods=['GET'])
+def authenticate(email, passwd):
+    """Authentication"""
+    response_object = {
+        'status': 'fail',
+        'message': 'User does not exist'
+    }
+    try:
+        user = User.query.filter_by(email=email).first()
+        if not user:
+            return jsonify(response_object), 404
+        elif user.password != passwd:
+            return jsonify(response_object), 404
+        else:
+            response_object = {
+                'status': 'success',
+                'data': {
+                    'id': user.id,
+                    'username': user.username,
+                    'email': user.email,
+                    'password': user.password,
+                    'active': user.active
+                }
+            }
+            return jsonify(response_object), 200
+    except ValueError:
+        return jsonify(response_object), 404
+
+
 @users_blueprint.route('/users', methods=['GET'])
 def get_all_users():
     """Get all users"""

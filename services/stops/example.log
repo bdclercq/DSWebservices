@@ -1,0 +1,19 @@
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 302-776-119
+INFO:werkzeug: * Detected change in '/usr/src/app/project/api/stops.py', reloading
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 302-776-119
+INFO:werkzeug: * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 302-776-119
+INFO:werkzeug:172.18.0.1 - - [11/Dec/2018 16:28:26] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [11/Dec/2018 16:28:26] "GET /favicon.ico HTTP/1.1" 404 -
+INFO:werkzeug:172.18.0.1 - - [11/Dec/2018 16:28:40] "POST / HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [11/Dec/2018 16:28:41] "GET /favicon.ico HTTP/1.1" 404 -
+INFO:werkzeug:172.18.0.1 - - [11/Dec/2018 16:31:35] "POST / HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [11/Dec/2018 16:31:35] "GET /favicon.ico HTTP/1.1" 404 -
+INFO:werkzeug: * Detected change in '/usr/src/app/project/api/stops.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat

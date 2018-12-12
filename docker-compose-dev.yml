@@ -27,3 +27,89 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    command: -p 5432
+
+  ratings:
+    build:
+      context: ./services/ratings
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/ratings:/usr/src/app'
+    ports:
+      - 5002:5000
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+      - DATABASE_URL=postgres://postgres:postgres@ratings-db:5433/ratings_dev
+    depends_on:
+      - ratings-db
+
+  ratings-db:
+    build:
+      context: ./services/ratings/project/db
+      dockerfile: Dockerfile
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    command: -p 5433
+
+  stops:
+    build:
+      context: ./services/stops
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/stops:/usr/src/app'
+    ports:
+      - 5003:5000
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+      - DATABASE_URL=postgres://postgres:postgres@stops-db:5434/stops_dev
+    depends_on:
+      - stops-db
+
+  stops-db:
+    build:
+      context: ./services/stops/project/db
+      dockerfile: Dockerfile
+    ports:
+      - 5434:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    command: -p 5434
+
+  vehicles:
+    build:
+      context: ./services/vehicles
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/vehicles:/usr/src/app'
+    ports:
+      - 5004:5000
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+      - DATABASE_URL=postgres://postgres:postgres@vehicles-db:5435/vehicles_dev
+    depends_on:
+      - stops-db
+
+  vehicles-db:
+    build:
+      context: ./services/vehicles/project/db
+      dockerfile: Dockerfile
+    ports:
+      - 5435:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    command: -p 5435
+
+
+
+
+
+
+
