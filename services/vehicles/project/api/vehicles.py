@@ -32,7 +32,7 @@ def add_vehicle():
         vehicle = Vehicle.query.filter_by(number=number).first()
         # user = User.query.filter_by(email=email).first()
         if not vehicle:
-            conn = http.client.HTTPSConnection('http://users:5001')
+            conn = http.client.HTTPSConnection('http://users:5000')
             conn.request("GET", "/users/{0},{1}".format(email, password))
             response = conn.getresponse()
             data = response.read()
@@ -70,9 +70,9 @@ def get_all_ratings():
 @vehicles_blueprint.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        type = request.form['type']
+        typ = request.form['type']
         number = request.form['number']
-        db.session.add(Vehicle(type=type, number=number))
+        db.session.add(Vehicle(type=typ, number=number))
         db.session.commit()
     vehicles = Vehicle.query.all()
     return render_template('index.html', vehicles=vehicles)

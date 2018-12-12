@@ -23,6 +23,19 @@ def get_all_stops():
             'stops': [stop.to_json() for stop in list(set(Stop.query.all()))]
         }
     }
+    return jsonify(response_object), 200\
+
+
+
+@stops_blueprint.route('/stops/<name>', methods=['GET'])
+def get_stops(name):
+    """Get all stops"""
+    response_object = {
+        'status': 'success',
+        'data': {
+            'stops': [stop.to_json() for stop in list(set(Stop.query.filter_by(location=name)))]
+        }
+    }
     return jsonify(response_object), 200
 
 

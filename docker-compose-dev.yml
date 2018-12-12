@@ -107,9 +107,14 @@ services:
       - POSTGRES_PASSWORD=postgres
     command: -p 5435
 
-
-
-
-
-
-
+  ui:
+    build:
+      context: ./services/UI
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/UI:/usr/src/app'
+    ports:
+      - 5005:5000
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
