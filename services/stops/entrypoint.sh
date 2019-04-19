@@ -2,10 +2,10 @@
 
 echo "Waiting for postgres..."
 
-while ! nc -z stops-db 5434; do
+while ! nc -z stops-db 5435; do
   sleep 0.1
 done
 
 echo "PostgreSQL started"
 
-python manage.py run -h 0.0.0.0
+python -u manage.py run -h 0.0.0.0 -p 5003
