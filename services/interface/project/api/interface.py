@@ -3,7 +3,7 @@ from sqlalchemy import exc
 from project import db
 import requests
 
-UI_blueprint = Blueprint('UI', __name__, template_folder='./templates')
+UI_blueprint = Blueprint('interface', __name__, template_folder='./templates')
 
 
 @UI_blueprint.route('/', methods=['GET', 'POST'])

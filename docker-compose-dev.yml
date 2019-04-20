@@ -102,12 +102,12 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
-  ui: # UI doesn't run
+  interface: # interface doesn't run
     build:
-      context: ./services/UI
+      context: services/interface
       dockerfile: Dockerfile-dev
     volumes:
-      - './services/UI:/usr/src/app'
+      - './services/interface:/usr/src/app'
     ports:
       - 5005:5005
     environment:

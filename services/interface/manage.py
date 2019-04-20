@@ -3,7 +3,7 @@ import unittest
 from flask.cli import FlaskGroup
 
 from project import create_app, db  # new
-from project.api.models import UI  # new
+from project.api.models import Interface  # new
 import http.client, urllib.request, urllib.parse, urllib.error, base64, json
 
 app = create_app()  # new
