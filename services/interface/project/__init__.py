@@ -20,7 +20,7 @@ def create_app(script_info=None):
     db.init_app(app)
 
     # register blueprints
-    from project.api.UI import UI_blueprint
+    from project.api.interface import UI_blueprint
     app.register_blueprint(UI_blueprint)
 
     # shell context for flask cli
