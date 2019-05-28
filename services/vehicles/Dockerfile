@@ -22,5 +22,7 @@ RUN chmod 777 /usr/src/app/entrypoint.sh
 # add app
 COPY . /usr/src/app
 
+EXPOSE 5004
+
 # run server
 CMD ["/usr/src/app/entrypoint.sh"]

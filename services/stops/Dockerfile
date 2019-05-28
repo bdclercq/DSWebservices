@@ -15,8 +15,14 @@ WORKDIR /usr/src/app
 COPY ./requirements.txt /usr/src/app/requirements.txt
 RUN pip install -r requirements.txt
 
+# add entrypoint.sh
+COPY ./entrypoint.sh /usr/src/app/entrypoint.sh
+RUN chmod 777 /usr/src/app/entrypoint.sh
+
 # add app
 COPY . /usr/src/app
 
+EXPOSE 5003
+
 # run server
-RUN python -u manage.py run -p 5005
+CMD ["/usr/src/app/entrypoint.sh"]

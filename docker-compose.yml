@@ -5,11 +5,11 @@ services:
   users: # Users run
     build:
       context: ./services/users
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile
     volumes:
-      - './services/users:/usr/src/app'
+      - ./services/users:/usr/src/app
     ports:
-      - 5001:5001
+      - "5001:5001"
     environment:
       - FLASK_ENV=development
       - APP_SETTINGS=project.config.DevelopmentConfig
@@ -22,7 +22,7 @@ services:
       context: ./services/users/project/db
       dockerfile: Dockerfile
     ports:
-      - 5433:5432
+      - "5433:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -30,11 +30,11 @@ services:
   ratings: # Ratins don't run
     build:
       context: ./services/ratings
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile
     volumes:
-      - './services/ratings:/usr/src/app'
+      - ./services/ratings:/usr/src/app
     ports:
-      - 5002:5002
+      - "5002:5002"
     environment:
       - FLASK_ENV=development
       - APP_SETTINGS=project.config.DevelopmentConfig
@@ -47,7 +47,7 @@ services:
       context: ./services/ratings/project/db
       dockerfile: Dockerfile
     ports:
-      - 5434:5432
+      - "5434:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -55,11 +55,11 @@ services:
   stops: # Stops run
     build:
       context: ./services/stops
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile
     volumes:
-      - './services/stops:/usr/src/app'
+      - ./services/stops:/usr/src/app
     ports:
-      - 5003:5003
+      - "5003:5003"
     environment:
       - FLASK_ENV=development
       - APP_SETTINGS=project.config.DevelopmentConfig
@@ -72,7 +72,7 @@ services:
       context: ./services/stops/project/db
       dockerfile: Dockerfile
     ports:
-      - 5435:5432
+      - "5435:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -80,11 +80,11 @@ services:
   vehicles: # Vehicles don't run
     build:
       context: ./services/vehicles
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile
     volumes:
-      - './services/vehicles:/usr/src/app'
+      - ./services/vehicles:/usr/src/app
     ports:
-      - 5004:5004
+      - "5004:5004"
     environment:
       - FLASK_ENV=development
       - APP_SETTINGS=project.config.DevelopmentConfig
@@ -97,7 +97,7 @@ services:
       context: ./services/vehicles/project/db
       dockerfile: Dockerfile
     ports:
-      - 5436:5432
+      - "5436:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -105,11 +105,11 @@ services:
   interface: # interface doesn't run
     build:
       context: services/interface
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile
     volumes:
-      - './services/interface:/usr/src/app'
+      - ./services/interface:/usr/src/app
     ports:
-      - 5005:5005
+      - "5005:5005"
     environment:
       - FLASK_ENV=development
       - APP_SETTINGS=project.config.DevelopmentConfig
