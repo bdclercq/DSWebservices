@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+    <div>
+        {% if message %}
+            {{ message }}<br>
+            Please try again.<br>
+        {% endif %}
+        <form action="/add_user" method="post">
+            <div>
+                <input type="email" name="email">
+            </div>
+            <div>
+                <input type="password" name="pwd">
+            </div>
+
+            <input type="submit" value="Register">
+        </form>
+    </div>
+{% endblock %}

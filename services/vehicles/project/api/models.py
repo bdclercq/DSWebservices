@@ -1,5 +1,3 @@
-from sqlalchemy.sql import func
-
 from project import db
 
 
@@ -9,7 +7,7 @@ class Vehicle(db.Model):
     type = db.Column(db.String(128), nullable=False)
     number = db.Column(db.Integer(), nullable=False)
     avg_score = db.Column(db.Float(), nullable=False, default=0.0)
-    created_date = db.Column(db.DateTime, default=func.now(), nullable=False)
+    creator = db.Column(db.String(128), nullable=False)
 
     def __init__(self, type, number):
         self.type = type

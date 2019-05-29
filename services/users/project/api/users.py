@@ -6,15 +6,7 @@ from project import db
 users_blueprint = Blueprint('users', __name__, template_folder='./templates')
 
 
-@users_blueprint.route('/users/ping', methods=['GET'])
-def ping_pong():
-    return jsonify({
-        'status': 'success',
-        'message': 'pong!'
-    })
-
-
-@users_blueprint.route('/users', methods=['POST'])
+@users_blueprint.route('/add_user', methods=['POST'])
 def add_user():
     post_data = request.get_json()
     response_object = {
@@ -23,53 +15,25 @@ def add_user():
     }
     if not post_data:
         return jsonify(response_object), 400
-    username = post_data.get('username')
     email = post_data.get('email')
     password = post_data.get('password')
     try:
-        user = User.query.filter_by(email=email).first()
+        user = User.query.filter_by(email=email).first().scalar() is not None
         if not user:
-            db.session.add(User(username=username, email=email, password=password))
+            db.session.add(User(email=email, password=password))
             db.session.commit()
             response_object['status'] = 'success'
             response_object['message'] = f'{email} was added!'
             return jsonify(response_object), 201
         else:
-            response_object['message'] = 'Sorry. That email already exists.'
+            response_object['message'] = 'Sorry. That email has already been taken.'
             return jsonify(response_object), 400
     except exc.IntegrityError as e:
         db.session.rollback()
         return jsonify(response_object), 400
 
 
-@users_blueprint.route('/users/<user_id>', methods=['GET'])
-def get_single_user(user_id):
-    """Get single user details"""
-    response_object = {
-        'status': 'fail',
-        'message': 'User does not exist'
-    }
-    try:
-        user = User.query.filter_by(id=int(user_id)).first()
-        if not user:
-            return jsonify(response_object), 404
-        else:
-            response_object = {
-                'status': 'success',
-                'data': {
-                    'id': user.id,
-                    'username': user.username,
-                    'email': user.email,
-                    'password': user.password,
-                    'active': user.active
-                }
-            }
-            return jsonify(response_object), 200
-    except ValueError:
-        return jsonify(response_object), 404
-
-
-@users_blueprint.route('/users/<email>,<passwd>', methods=['GET'])
+@users_blueprint.route('/authenticate/<email>,<passwd>', methods=['GET'])
 def authenticate(email, passwd):
     """Authentication"""
     response_object = {
@@ -77,20 +41,15 @@ def authenticate(email, passwd):
         'message': 'User does not exist'
     }
     try:
-        user = User.query.filter_by(email=email).first()
-        if not user:
-            return jsonify(response_object), 404
-        elif user.password != passwd:
+        exists = User.query.filter_by(email=email, password=passwd).first().scalar() is not None
+        if not exists:
             return jsonify(response_object), 404
         else:
+            user = User.query.filter_by(email=email, password=passwd).first()
             response_object = {
                 'status': 'success',
                 'data': {
-                    'id': user.id,
-                    'username': user.username,
-                    'email': user.email,
-                    'password': user.password,
-                    'active': user.active
+                    'id': user.id
                 }
             }
             return jsonify(response_object), 200
@@ -98,8 +57,8 @@ def authenticate(email, passwd):
         return jsonify(response_object), 404
 
 
-@users_blueprint.route('/users', methods=['GET'])
-def get_all_users():
+@users_blueprint.route('/get_users', methods=['GET'])
+def get_users():
     """Get all users"""
     response_object = {
         'status': 'success',
@@ -113,10 +72,9 @@ def get_all_users():
 @users_blueprint.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        username = request.form['username']
         email = request.form['email']
         password = request.form['password']
-        db.session.add(User(username=username, email=email, password=password))
+        db.session.add(User(email=email, password=password))
         db.session.commit()
     users = User.query.all()
     return render_template('index.html', users=users)

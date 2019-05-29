@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <title>Flask on Docker</title>
     <!-- meta -->
@@ -9,59 +9,57 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <!-- styles -->
     <link
-      href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css"
-      rel="stylesheet"
+            href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css"
+            rel="stylesheet"
     >
-    {% block css %}{% endblock %}
-  </head>
-  <body>
-    <div class="container">
-      <div class="column is-one-third">
+</head>
+<body>
+<div class="container">
+    <div class="column is-one-third">
         <br>
         <h1 class="title">All vehicles</h1>
-        <hr><br>
+        <hr>
+        <br>
         <form action="/" method="POST">
-          <div class="field">
-            <select id="type" style="color:#383838; font-size: 10pt; background:#CEBC77" size="1">
-                            <option value="">---SELECT---</option>
-                            <option value="bus"> Bus</option>
-                            <option value="tram"> Tram</option>
-            </select>
-          </div>
             <div class="field">
+                <select id="type" style="color:#383838; font-size: 10pt; background:#CEBC77" size="1">
+                    <option value="">---SELECT---</option>
+                    <option value="bus"> Bus</option>
+                    <option value="tram"> Tram</option>
+                </select>
+            </div>
+            <div class="field">
+                <input
+                        name="number" class="input"
+                        type="number" placeholder="What is the unique vehicle number?" required>
+            </div>
+            <div class="field">
+                <input
+                        name="email" class="input"
+                        type="text" placeholder="email" required>
+            </div>
+            <div class="field">
+                <input
+                        name="password" class="input"
+                        type="text" placeholder="password" required>
+            </div>
             <input
-              name="number" class="input"
-              type="number" placeholder="What is the unique vehicle number?" required>
-          </div>
-          <div class="field">
-            <input
-              name="email" class="input"
-              type="text" placeholder="email" required>
-          </div>
-          <div class="field">
-            <input
-              name="password" class="input"
-              type="text" placeholder="password" required>
-          </div>
-          <input
-            type="submit" class="button is-primary is-fullwidth"
-            value="Submit">
+                    type="submit" class="button is-primary is-fullwidth"
+                    value="Submit">
         </form>
         <br>
         <hr>
-          {% if vehicles %}
+        {% if vehicles %}
             <ol>
-              {% for vehicle in vehicles %}
-                <li>{{vehicle.type}} with number {{vehicle.number}}</li>
-              {% endfor %}
+                {% for vehicle in vehicles %}
+                    <li>{{ vehicle.type }} with number {{ vehicle.number }}</li>
+                {% endfor %}
             </ol>
-          {% else %}
+        {% else %}
             <p>No vehicles!</p>
-          {% endif %}
-        </div>
-      </div>
+        {% endif %}
     </div>
-    </script>
-    {% block js %}{% endblock %}
-  </body>
+</div>
+</div>
+</body>
 </html>
