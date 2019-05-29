@@ -18,7 +18,5 @@ RUN pip install -r requirements.txt
 # add app
 COPY . /usr/src/app
 
-EXPOSE 5000
-
 # run server
-RUN python -u manage.py run -p 5000
+RUN python -u manage.py run -h 0.0.0.0 -p 5000
