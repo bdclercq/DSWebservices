@@ -1,3 +1,3 @@
 #!/bin/sh
 
-python -u manage.py run -h 0.0.0.0 -p 5005
+python -u manage.py run -h 0.0.0.0 -p 5000
