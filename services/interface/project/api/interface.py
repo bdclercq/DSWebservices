@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request, render_template, redirect
 import requests
+import json
 
 UI_blueprint = Blueprint('interface', __name__, template_folder='./templates')
 
@@ -10,6 +11,7 @@ def index():
 
 @UI_blueprint.route('/Users', methods=['GET'])
 def user_management():
+    usrs = requests.get("http://users:5001/get_users")
     return render_template("users.html")
 
 @UI_blueprint.route('/add_user', methods=['POST'])
@@ -17,8 +19,9 @@ def add_user():
     result = request.form
     mail = result['email']
     pwd = result['pwd']
-    status = requests.post(app.config["USERS_URI"] + "/add_user", json={'email': mail, 'password': pwd})
-    result = status.json()
+    data = json.dumps({'email': mail, 'password': pwd}), 200
+    status = requests.post("http://users:5001/add_user", json=data)
+    result = json.dumps(status.json())
     if result["status"] == "fail":
         return render_template('users.html', message=result['message'])
     else:

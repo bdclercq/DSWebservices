@@ -12,7 +12,7 @@ services:
       - PORT=5001
       - FLASK_ENV=development
       - APP_SETTINGS=project.config.DevelopmentConfig
-      - DATABASE_URL=postgres://postgres:postgres@users-db:5432/users_db
+      - DATABASE_URL=postgres://postgres:postgres@users-db:5433/users_db
     depends_on:
       - users-db
 
@@ -23,7 +23,6 @@ services:
     ports:
       - 5433:5432
     environment:
-      - PORT=5433
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
