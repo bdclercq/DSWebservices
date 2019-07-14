@@ -8,17 +8,18 @@ users_blueprint = Blueprint('users', __name__, template_folder='./templates')
 
 @users_blueprint.route('/add_user', methods=['POST'])
 def add_user():
-    post_data = request.get_json()
+    post_data = request.form
+    print(post_data)
     response_object = {
         'status': 'fail',
         'message': 'Invalid payload.'
     }
     if not post_data:
         return jsonify(response_object), 400
-    email = post_data.get('email')
-    password = post_data.get('password')
+    email = post_data['email']
+    password = post_data['pwd']
     try:
-        user = User.query.filter_by(email=email).first().scalar() is not None
+        user = db.session.query(User.email).filter_by(email=email).scalar() is not None
         if not user:
             db.session.add(User(email=email, password=password))
             db.session.commit()

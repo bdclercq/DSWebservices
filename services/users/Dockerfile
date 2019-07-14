@@ -1,5 +1,5 @@
 # base image
-FROM python:3.6.5-alpine
+FROM python:3.7.2-alpine
 
 #install dependencies
 RUN apk update && \
@@ -16,12 +16,12 @@ COPY ./requirements.txt /usr/src/app/requirements.txt
 RUN pip install -r requirements.txt
 
 # add entrypoint.sh
-#COPY ./entrypoint.sh /usr/src/app/entrypoint.sh
-#RUN chmod a+x /usr/src/app/entrypoint.sh
+COPY ./entrypoint.sh /usr/src/app/entrypoint.sh
+RUN chmod a+x /usr/src/app/entrypoint.sh
 
 # add app
 COPY . /usr/src/app
 
 # run server
-#CMD ["/usr/src/app/entrypoint.sh"]
-CMD python -u manage.py run -h 0.0.0.0 -p 5001
+CMD ["/usr/src/app/entrypoint.sh"]
+#CMD python -u manage.py run -h 0.0.0.0 -p 5001
