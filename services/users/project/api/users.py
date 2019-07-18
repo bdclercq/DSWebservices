@@ -6,7 +6,7 @@ from project import db
 users_blueprint = Blueprint('users', __name__, template_folder='./templates')
 
 
-@users_blueprint.route('/add_user', methods=['POST'])
+@users_blueprint.route('/add_user', methods=['POST', 'GET'])
 def add_user():
     post_data = request.form
     print(post_data)
@@ -31,6 +31,7 @@ def add_user():
             return jsonify(response_object), 400
     except exc.IntegrityError as e:
         db.session.rollback()
+        response_object['message'] = 'An error occurred, please try again later.'
         return jsonify(response_object), 400
 
 
@@ -42,7 +43,7 @@ def authenticate(email, passwd):
         'message': 'User does not exist'
     }
     try:
-        exists = User.query.filter_by(email=email, password=passwd).first().scalar() is not None
+        exists = User.query.filter_by(email=email, password=passwd).scalar() is not None
         if not exists:
             return jsonify(response_object), 404
         else:

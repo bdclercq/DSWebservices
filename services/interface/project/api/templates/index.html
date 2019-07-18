@@ -4,6 +4,12 @@
         {% if message %}
             {{ message }}
         {% endif %}
+        {% if users %}
+            Following users are found in the database:
+            {% for user in users %}
+                {{ user }}
+            {% endfor %}
+        {% endif %}
     </div>
     <div>
         Click on one of the items in the sidebar to continue.

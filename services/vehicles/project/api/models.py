@@ -9,9 +9,10 @@ class Vehicle(db.Model):
     avg_score = db.Column(db.Float(), nullable=False, default=0.0)
     creator = db.Column(db.String(128), nullable=False)
 
-    def __init__(self, type, number):
+    def __init__(self, type, number, creator):
         self.type = type
         self.number = number
+        self.creator = creator
 
     def to_json(self):
         return {

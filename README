@@ -1,0 +1,2 @@
+Command to force the db to be made: docker-compose exec <service> python manage.py recreate-db
+Check db: docker-compose exec <service>-db psql -U postgres ; \c <service>_db ; \dt

@@ -5,6 +5,12 @@
             {{ message }}<br>
             Please try again.<br>
         {% endif %}
+        {% if users %}
+            Following users are found in the database:
+            {% for user in users %}
+                {{ user }}
+            {% endfor %}
+        {% endif %}
         <form action="/add_user" method="post">
             <div>
                 <input type="email" name="email">

@@ -27,32 +27,31 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
-#  vehicles:
-#    build:
-#      context: ./services/vehicles
-#      dockerfile: Dockerfile
-#    volumes:
-#      - './services/vehicles:/usr/src/app'
-#    ports:
-#      - 5004:5004
-#    environment:
-#      - FLASK_ENV=development
-#      - APP_SETTINGS=project.config.DevelopmentConfig
-#      - DATABASE_URL=postgres://postgres:postgres@vehicles-db:5436/vehicles_db
-#      - USERS_URI=http://users:5001
-#    depends_on:
-#      - vehicles-db
-#      - users
-#
-#  vehicles-db:
-#    build:
-#      context: ./services/vehicles/project/db
-#      dockerfile: Dockerfile
-#    ports:
-#      - 5436:5432
-#    environment:
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=postgres
+  vehicles:
+    build:
+      context: ./services/vehicles
+      dockerfile: Dockerfile
+    volumes:
+      - './services/vehicles:/usr/src/app'
+    ports:
+      - 5004:5004
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+      - DATABASE_URL=postgres://postgres:postgres@vehicles-db:5432/vehicles_db
+    depends_on:
+      - vehicles-db
+      - users
+
+  vehicles-db:
+    build:
+      context: ./services/vehicles/project/db
+      dockerfile: Dockerfile
+    ports:
+      - 5436:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
 
 #  ratings: # Ratins don't run
 #    build:
@@ -115,5 +114,5 @@ services:
       - USERS_URI=http://users:5001
       - VEHICLES_URI=http://vehicles:5004
     depends_on:
-#      - vehicles
+      - vehicles
       - users
