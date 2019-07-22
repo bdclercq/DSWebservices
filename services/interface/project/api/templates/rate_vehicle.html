@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+
+    {% if message %}
+        {{ message }}<br>
+        Please try again.<br>
+    {% endif %}
+
+    <div class="container">
+        <div class="column is-one-third">
+            <br>
+            <h1 class="title">Rate a vehicle</h1>
+            <hr>
+            <br>
+            <form action="/rate_vehicle" method="POST">
+                <div class="field">
+                    <input
+                            name="number" class="input"
+                            type="number" placeholder="What is the unique vehicle number?" required>
+                </div>
+                <div class="field">
+                    <input
+                            name="score" class="input"
+                            type="number" step="0.1" placeholder="What is your rating?" required>
+                </div>
+                <div class="field">
+                    <input
+                            name="descr" class="input"
+                            type="text" placeholder="Why this rating?" required>
+                </div>
+                <div class="field">
+                    <input
+                            name="email" class="input"
+                            type="email" placeholder="email" required>
+                </div>
+                <div class="field">
+                    <input
+                            name="password" class="input"
+                            type="password" placeholder="password" required>
+                </div>
+                <input
+                        type="submit" class="button is-primary is-fullwidth"
+                        value="Submit">
+            </form>
+            <br>
+            <hr>
+            {% if vehicles %}
+                <ol>
+                    {% for vehicle in vehicles %}
+                        <li>{{ vehicle["type"] }} with number {{ vehicle["number"] }} and rating {{ vehicle["average score"] }} <a href="/remove_vehicle/{{ vehicle["number"] }}">Remove</a></li>
+                    {% endfor %}
+                </ol>
+            {% else %}
+                <p>No vehicles!</p>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

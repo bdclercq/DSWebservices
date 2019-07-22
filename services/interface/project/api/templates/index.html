@@ -2,12 +2,12 @@
 {% block content %}
     <div>
         {% if message %}
-            {{ message }}
+            {{ message }}<br>
         {% endif %}
         {% if users %}
             Following users are found in the database:
             {% for user in users %}
-                {{ user }}
+                {{ user.email }}<br>
             {% endfor %}
         {% endif %}
     </div>
@@ -15,5 +15,6 @@
         Click on one of the items in the sidebar to continue.
         <li>The 'Users' tab will allow you to register yourself.</li>
         <li>The 'Vehicles' tab will allow you to add or remove a vehicle.</li>
+        <li>The 'Ratings' tab will allow you to rate a vehicle.</li>
     </div>
 {% endblock %}

@@ -8,7 +8,7 @@
         {% if users %}
             Following users are found in the database:
             {% for user in users %}
-                {{ user }}
+                {{ user.email }}<br>
             {% endfor %}
         {% endif %}
         <form action="/add_user" method="post">

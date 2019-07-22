@@ -53,41 +53,41 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
-#  ratings: # Ratins don't run
-#    build:
-#      context: ./services/ratings
-#      dockerfile: Dockerfile
-#    ports:
-#      - 5002:5002
-#    environment:
-#      - PORT=5002
-#      - FLASK_ENV=development
-#      - APP_SETTINGS=project.config.DevelopmentConfig
-#      - DATABASE_URL=postgres://postgres:postgres@ratings-db:5434/ratings_db
-#    depends_on:
-#      - ratings-db
-#      - users
+  ratings: # Ratins don't run
+    build:
+      context: ./services/ratings
+      dockerfile: Dockerfile
+    ports:
+      - 5002:5002
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+      - DATABASE_URL=postgres://postgres:postgres@ratings-db:5432/ratings_db
+    depends_on:
+      - ratings-db
+      - users
+      - vehicles
 #      - stops
-#
-#  ratings-db:
-#    build:
-#      context: ./services/ratings/project/db
-#      dockerfile: Dockerfile
-#    ports:
-#      - "5434:5432"
-#    environment:
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=postgres
+
+  ratings-db:
+    build:
+      context: ./services/ratings/project/db
+      dockerfile: Dockerfile
+    ports:
+      - 5434:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
 #  stops: # Stops run
 #    build:
 #      context: ./services/stops
 #      dockerfile: Dockerfile
 #    ports:
-#      - "5003:5003"
+#      - 5003:5003
 #    environment:
 #      - FLASK_ENV=development
 #      - APP_SETTINGS=project.config.DevelopmentConfig
-#      - DATABASE_URL=postgres://postgres:postgres@stops-db:5435/stops_db
+#      - DATABASE_URL=postgres://postgres:postgres@stops-db:5432/stops_db
 #    depends_on:
 #      - stops-db
 #
@@ -96,7 +96,7 @@ services:
 #      context: ./services/stops/project/db
 #      dockerfile: Dockerfile
 #    ports:
-#      - "5435:5432"
+#      - 5435:5432
 #    environment:
 #      - POSTGRES_USER=postgres
 #      - POSTGRES_PASSWORD=postgres
@@ -116,3 +116,4 @@ services:
     depends_on:
       - vehicles
       - users
+      - ratings
