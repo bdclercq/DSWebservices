@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div class="container">
+        <div class="column is-one-third">
+            <br>
+            <h1 class="title">All stops</h1>
+            <hr>
+            <br>
+        <a href="/view_stops">Get all stops</a><br>
+        <a href="/view_stops_provinces">Get stops per province</a><br>
+        <a href="/view_stops_locations">Get stops per location</a><br>
+            <hr>
+            {% if stops %}
+                There are {{ stops|length }} stops found in the database.
+            {% else %}
+                <p>No stops found!</p>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

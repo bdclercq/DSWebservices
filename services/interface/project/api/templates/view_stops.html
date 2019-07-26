@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+    <div>
+        {% if stops %}
+            Following stops are found in the database:<br>
+            <div style="overflow-y: scroll; height:600px;">
+                {% for stop in stops %}
+                    {{ stop.stop }} located in {{ stop.location }}<br>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

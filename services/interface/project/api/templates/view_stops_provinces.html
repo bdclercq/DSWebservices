@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+    <div>
+        {% if provs %}
+            Following provinces are available:<br>
+                {% for prov in provs %}
+                    {{ prov['omschrijving'] }}<br>
+                {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}

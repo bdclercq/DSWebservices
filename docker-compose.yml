@@ -67,7 +67,7 @@ services:
       - ratings-db
       - users
       - vehicles
-#      - stops
+      - stops
 
   ratings-db:
     build:
@@ -78,28 +78,29 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-#  stops: # Stops run
-#    build:
-#      context: ./services/stops
-#      dockerfile: Dockerfile
-#    ports:
-#      - 5003:5003
-#    environment:
-#      - FLASK_ENV=development
-#      - APP_SETTINGS=project.config.DevelopmentConfig
-#      - DATABASE_URL=postgres://postgres:postgres@stops-db:5432/stops_db
-#    depends_on:
-#      - stops-db
-#
-#  stops-db:
-#    build:
-#      context: ./services/stops/project/db
-#      dockerfile: Dockerfile
-#    ports:
-#      - 5435:5432
-#    environment:
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=postgres
+
+  stops: # Stops run
+    build:
+      context: ./services/stops
+      dockerfile: Dockerfile
+    ports:
+      - 5003:5003
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+      - DATABASE_URL=postgres://postgres:postgres@stops-db:5432/stops_db
+    depends_on:
+      - stops-db
+
+  stops-db:
+    build:
+      context: ./services/stops/project/db
+      dockerfile: Dockerfile
+    ports:
+      - 5435:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
 
   interface:
     build:

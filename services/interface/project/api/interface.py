@@ -10,17 +10,13 @@ def index():
     usrs = requests.get("http://users:5001/get_users")
     return render_template('index.html', users=usrs.json()['data']['users'])
 
+################################################################
+
 
 @UI_blueprint.route('/Users', methods=['GET'])
 def user_management():
     usrs = requests.get("http://users:5001/get_users")
     return render_template("users.html", users=usrs.json()['data']['users'])
-
-
-@UI_blueprint.route('/Vehicles', methods=['GET', 'POST'])
-def vehicle_management():
-    vehicles = requests.get("http://vehicles:5004/vehicles")
-    return render_template("vehicles.html", vehicles=vehicles.json()['data']['vehicles'])
 
 
 @UI_blueprint.route('/add_user', methods=['POST'])
@@ -38,6 +34,14 @@ def add_user():
     else:
         return render_template('index.html', message=result['message'],
                                users=requests.get("http://users:5001/get_users").json()['data']['users'])
+
+################################################################
+
+
+@UI_blueprint.route('/Vehicles', methods=['GET', 'POST'])
+def vehicle_management():
+    vehicles = requests.get("http://vehicles:5004/vehicles")
+    return render_template("vehicles.html", vehicles=vehicles.json()['data']['vehicles'])
 
 
 @UI_blueprint.route('/add_vehicles', methods=['POST', 'GET'])
@@ -77,6 +81,8 @@ def remove_vehicle():
         return render_template('index.html', message=result['message'],
                                users=requests.get("http://users:5001/get_users").json()['data']['users'])
 
+################################################################
+
 
 @UI_blueprint.route('/Ratings', methods=['GET', 'POST'])
 def rating_management():
@@ -100,3 +106,32 @@ def rate_vehicle():
     else:
         return render_template('index.html', message=result['message'],
                                users=requests.get("http://users:5001/get_users").json()['data']['users'])
+
+################################################################
+
+
+@UI_blueprint.route('/Stops', methods=['POST', 'GET'])
+def stops_management():
+    stops = requests.get("http://stops:5003/stops")
+    return render_template("stops.html", stops=stops.json()['data']['stops'])
+
+
+@UI_blueprint.route("/view_stops", methods=['POST', 'GET'])
+def view_all_stops():
+    stops = requests.get("http://stops:5003/stops")
+    return render_template("view_stops.html", stops=stops.json()['data']['stops'])
+
+
+@UI_blueprint.route("/view_stops_provinces", methods=['POST', 'GET'])
+def view_stops_provinces():
+    provs = requests.get("http://stops:5003/stops/getProvs")
+    return render_template("view_stops_provinces.html", provs=provs.json()['data']['provinces'])
+
+
+@UI_blueprint.route("/view_stops_province/<prov>", methods=['POST', 'GET'])
+def view_stops_province(prov):
+    stops = requests.get("http://stops:5003/stops/get_prov/{0}".format(prov))
+    return render_template("view_stops.html", stops=stops.json()['data']['stops'])
+
+
+# @UI_blueprint.route("/view_stops_locations", methods=['POST', 'GET'])
