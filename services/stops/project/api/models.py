@@ -30,5 +30,5 @@ class Stop(db.Model):
             'lat': self.lat,
             'lon': self.lon,
             'prov': self.province,
-            'average score': self.avg_score
+            'average_score': self.avg_score
         }

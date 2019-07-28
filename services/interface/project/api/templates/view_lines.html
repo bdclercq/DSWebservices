@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+    <div>
+        {% if lines %}
+            Following lines are available for {{ prov_name }} ({{ lines|length }} lines in total):<br>
+            <div style="overflow-y: scroll; height:600px;">
+                {% for line in lines %}
+                    <a href="/view_stops_line/{{ prov }}/{{ line['lijnnummerPubliek'] }}">
+                        {{ line['lijnnummerPubliek'] }} {{ line['omschrijving'] }}
+                    </a> <br>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

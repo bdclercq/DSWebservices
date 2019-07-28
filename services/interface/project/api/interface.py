@@ -134,4 +134,29 @@ def view_stops_province(prov):
     return render_template("view_stops.html", stops=stops.json()['data']['stops'])
 
 
+@UI_blueprint.route('/view_stops_lines', methods=['POST', 'GET'])
+def view_stops_lines():
+    provs = requests.get("http://stops:5003/stops/getProvs")
+    return render_template("view_stops_lines.html", provs=provs.json()['data']['provinces'])
+
+
+@UI_blueprint.route('/view_lines/<prov>', methods=['POST', 'GET'])
+def view_lines(prov):
+    lines = requests.get("http://stops:5003/stops/get_lines/{0}".format(prov))
+    provs = requests.get("http://stops:5003/stops/getProvs")
+    prov_name = 0
+    for p in provs.json()['data']['provinces']:
+        if p['entiteitnummer'] == prov:
+            prov_name = p['omschrijving']
+    return render_template("view_lines.html", prov=prov, prov_name=prov_name, lines=lines.json()['data']['lines'])
+
+
+@UI_blueprint.route('/view_stops_line/<prov>/<line>', methods=['POST', 'GET'])
+def view_stops_line(prov, line):
+    stops_to = requests.get("http://stops:5003/stops/get_stops_line_prov_to/{0}/{1}".format(line, prov))
+    stops_from = requests.get("http://stops:5003/stops/get_stops_line_prov_from/{0}/{1}".format(line, prov))
+    return render_template("view_stops.html", stops_to=stops_to.json()['data']['stops'],
+                           stops_from=stops_from.json()['data']['stops'])
+
+
 # @UI_blueprint.route("/view_stops_locations", methods=['POST', 'GET'])

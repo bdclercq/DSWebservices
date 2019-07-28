@@ -5,7 +5,21 @@
             Following stops are found in the database:<br>
             <div style="overflow-y: scroll; height:600px;">
                 {% for stop in stops %}
-                    {{ stop.stop }} located in {{ stop.location }}<br>
+                    {{ stop.stop }} located in {{ stop.location }} has a score of {{ stop.average_score }}<br>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if stops_to and stops_from %}
+            Following stops are for the one way:<br>
+            <div class="col-2" style="overflow-y: scroll; height:600px;">
+                {% for stop in stops_to %}
+                    {{ stop.stop }} located in {{ stop.location }} has a score of {{ stop.average_score }}<br>
+                {% endfor %}
+            </div><br>
+            Following stops are for the other way:<br>
+            <div class="col-2" style="overflow-y: scroll; height:600px;">
+                {% for stop in stops_from %}
+                    {{ stop.stop }} located in {{ stop.location }} has a score of {{ stop.average_score }}<br>
                 {% endfor %}
             </div>
         {% endif %}
