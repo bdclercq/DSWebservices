@@ -155,8 +155,13 @@ def view_lines(prov):
 def view_stops_line(prov, line):
     stops_to = requests.get("http://stops:5003/stops/get_stops_line_prov_to/{0}/{1}".format(line, prov))
     stops_from = requests.get("http://stops:5003/stops/get_stops_line_prov_from/{0}/{1}".format(line, prov))
-    return render_template("view_stops.html", stops_to=stops_to.json()['data']['stops'],
-                           stops_from=stops_from.json()['data']['stops'])
+    to_stops = stops_to.json()['data']['stops']
+    from_stops = stops_from.json()['data']['stops']
+    if to_stops is None:
+        to_stops = []
+    if from_stops is None:
+        from_stops = []
+    return render_template("view_stops.html", stops_to=to_stops, stops_from=from_stops)
 
 
 # @UI_blueprint.route("/view_stops_locations", methods=['POST', 'GET'])

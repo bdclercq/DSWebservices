@@ -3,24 +3,52 @@
     <div>
         {% if stops %}
             Following stops are found in the database:<br>
-            <div style="overflow-y: scroll; height:600px;">
-                {% for stop in stops %}
-                    {{ stop.stop }} located in {{ stop.location }} has a score of {{ stop.average_score }}<br>
-                {% endfor %}
+            {% if stops|length > 0 %}
+                <div class="col" style="overflow-y: scroll; height:600px;">
+                    {% for stop in stops %}
+                        {{ stop.stop }} located in {{ stop.location }} has a score of {{ stop.average_score }}<br>
+                    {% endfor %}
+                </div>
+            {% else %}
+                No stops found for this direction.
+            {% endif %}
+        {% elif stops_to or stops_from %}
+            <div class="row">
+                <div class="col">
+                    Following stops are for the one way:<br>
+                    {% if stops_to|length > 0 %}
+                        <div class="col" style="overflow-y: scroll; height:600px;">
+                            {% for stop in stops_to %}
+                                {{ stop.stop }} located in {{ stop.location }} has a score of {{ stop.average_score }}<br>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        No stops for this line in this direction.
+                    {% endif %}
+                </div>
+                <div class="col">
+                    Following stops are for the other way:<br>
+                    {% if stops_from|length > 0 %}
+                        <div class="col" style="overflow-y: scroll; height:600px;">
+                            {% for stop in stops_from %}
+                                {{ stop.stop }} located in {{ stop.location }} has a score of {{ stop.average_score }}<br>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        No stops found for this direction.
+                    {% endif %}
+                </div>
             </div>
-        {% endif %}
-        {% if stops_to and stops_from %}
-            Following stops are for the one way:<br>
-            <div class="col-2" style="overflow-y: scroll; height:600px;">
-                {% for stop in stops_to %}
-                    {{ stop.stop }} located in {{ stop.location }} has a score of {{ stop.average_score }}<br>
-                {% endfor %}
-            </div><br>
-            Following stops are for the other way:<br>
-            <div class="col-2" style="overflow-y: scroll; height:600px;">
-                {% for stop in stops_from %}
-                    {{ stop.stop }} located in {{ stop.location }} has a score of {{ stop.average_score }}<br>
-                {% endfor %}
+        {% else %}
+            <div class="row">
+                <div class="col">
+                    Following stops are for the one way:<br>
+                    No stops for this line in this direction.
+                </div>
+                <div class="col">
+                    Following stops are for the other way:<br>
+                    No stops found for this direction.
+                </div>
             </div>
         {% endif %}
     </div>

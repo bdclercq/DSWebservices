@@ -91,17 +91,27 @@ def get_stops_line_prov_to(line, prov):
     data = response.read()
     conn.close()
     data_to = json.loads(data)
-    stops = [stop for stop in data_to["haltes"]]
-    stopsnrs = [stop["haltenummer"] for stop in stops]
-    stopsnrs = list(set(stopsnrs))
-    print(stopsnrs)
-    response_object = {
-        'status': 'success',
-        'data': {
-            'stops': [stop.to_json() for stop in list(set(db.session.query(Stop).filter(Stop.id.in_(stopsnrs)).all()))]
+    try:
+        stops = [stop for stop in data_to["haltes"]]
+        stopsnrs = [stop["haltenummer"] for stop in stops]
+        stopsnrs = list(set(stopsnrs))
+        print(stopsnrs)
+        response_object = {
+            'status': 'success',
+            'data': {
+                'stops': [stop.to_json() for stop in list(set(db.session.query(Stop).filter(Stop.id.in_(stopsnrs)).all()))]
+            }
         }
-    }
-    return jsonify(response_object), 200
+        return jsonify(response_object), 200
+    except KeyError as ke:
+        # This means that there are no stops for this line in this province
+        response_object = {
+            'status': 'success',
+            'data': {
+                'stops': []
+            }
+        }
+        return jsonify(response_object), 200
 
 
 @stops_blueprint.route('/stops/get_stops_line_prov_from/<line>/<prov>', methods=['POST', 'GET'])
@@ -112,17 +122,27 @@ def get_stops_line_prov_from(line, prov):
     data = response.read()
     conn.close()
     data_from = json.loads(data)
-    stops = [stop for stop in data_from["haltes"]]
-    stopsnrs = [stop["haltenummer"] for stop in stops]
-    stopsnrs = list(set(stopsnrs))
-    print(stopsnrs)
-    response_object = {
-        'status': 'success',
-        'data': {
-            'stops': [stop.to_json() for stop in list(set(db.session.query(Stop).filter(Stop.id.in_(stopsnrs)).all()))]
+    try:
+        stops = [stop for stop in data_from["haltes"]]
+        stopsnrs = [stop["haltenummer"] for stop in stops]
+        stopsnrs = list(set(stopsnrs))
+        print(stopsnrs)
+        response_object = {
+            'status': 'success',
+            'data': {
+                'stops': [stop.to_json() for stop in list(set(db.session.query(Stop).filter(Stop.id.in_(stopsnrs)).all()))]
+            }
         }
-    }
-    return jsonify(response_object), 200
+        return jsonify(response_object), 200
+    except KeyError as ke:
+        # This means that there are no stops for this line in this province
+        response_object = {
+            'status': 'success',
+            'data': {
+                'stops': []
+            }
+        }
+        return jsonify(response_object), 200
 
 
 @stops_blueprint.route('/', methods=['GET', 'POST'])
