@@ -92,7 +92,8 @@ def rating_management():
 
 @UI_blueprint.route('/rate_vehicles', methods=['POST', 'GET'])
 def rate_vehicles():
-    return render_template('rate_vehicle.html')
+    vehicles = requests.get("http://vehicles:5004/vehicles")
+    return render_template('rate_vehicle.html', vehicles=vehicles)
 
 
 @UI_blueprint.route('/rate_vehicle', methods=['POST', 'GET'])
@@ -106,6 +107,29 @@ def rate_vehicle():
     else:
         return render_template('index.html', message=result['message'],
                                users=requests.get("http://users:5001/get_users").json()['data']['users'])
+
+
+@UI_blueprint.route('/rate_stops', methods=['POST', 'GET'])
+def rate_stops():
+    return redirect('/search')
+
+
+@UI_blueprint.route('/rate_stop/<id>', methods=['POST', 'GET'])
+def rate_stop(id):
+    name = requests.get("http://stops:5003/get_name/{0}".format(id))
+    if name.json()['status'] == 'success':
+        return render_template('rate_stop.html', stopname=name.json()['data']['name'], stopid=id)
+    else:
+        return render_template('index.html', message=name.json()['data']['message'])
+
+
+@UI_blueprint.route('/submit_rating', methods=['POST'])
+def submit_rating():
+    result = request.form
+    status = requests.post("http://ratings:5002/rate_stop", data=result)
+    result = status.json()
+    return render_template('index.html', message=result['message'])
+
 
 ################################################################
 
@@ -122,22 +146,28 @@ def view_all_stops():
     return render_template("view_stops.html", stops=stops.json()['data']['stops'])
 
 
-@UI_blueprint.route("/view_stops_provinces", methods=['POST', 'GET'])
-def view_stops_provinces():
-    provs = requests.get("http://stops:5003/stops/getProvs")
-    return render_template("view_stops_provinces.html", provs=provs.json()['data']['provinces'])
-
-
 @UI_blueprint.route("/view_stops_province/<prov>", methods=['POST', 'GET'])
 def view_stops_province(prov):
     stops = requests.get("http://stops:5003/stops/get_prov/{0}".format(prov))
     return render_template("view_stops.html", stops=stops.json()['data']['stops'])
 
 
-@UI_blueprint.route('/view_stops_lines', methods=['POST', 'GET'])
-def view_stops_lines():
+@UI_blueprint.route("/search", methods=['POST', 'GET'])
+def search():
     provs = requests.get("http://stops:5003/stops/getProvs")
-    return render_template("view_stops_lines.html", provs=provs.json()['data']['provinces'])
+    return render_template("provinces.html", provs=provs.json()['data']['provinces'])
+
+
+@UI_blueprint.route('/view_stops_location/<loc>', methods=['POST', 'GET'])
+def view_stops_location(loc):
+    stops = requests.get("http://stops:5003/stops/get_stops_location/{0}".format(loc))
+    return render_template("view_stops.html", stops=stops.json()['data']['stops'])
+
+
+@UI_blueprint.route('/view_locations/<prov>', methods=['POST', 'GET'])
+def view_locations(prov):
+    locs = requests.get("http://stops:5003/stops/get_locations/{0}".format(prov))
+    return render_template("view_locations.html", locs=locs.json()['data']['locations'])
 
 
 @UI_blueprint.route('/view_lines/<prov>', methods=['POST', 'GET'])
@@ -164,4 +194,3 @@ def view_stops_line(prov, line):
     return render_template("view_stops.html", stops_to=to_stops, stops_from=from_stops)
 
 
-# @UI_blueprint.route("/view_stops_locations", methods=['POST', 'GET'])

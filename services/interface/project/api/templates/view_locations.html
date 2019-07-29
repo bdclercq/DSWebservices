@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+    <div>
+        {% if locs %}
+            Following locations are available:<br>
+                {% for loc in locs %}
+{#                    <a href="/view_stops_location/{{ loc["omschrijving"] }}">{{ loc["omschrijving"] }}</a>#}
+                    <a href="/view_stops_location/{{ loc["gemeentenummer"] }}">{{ loc["omschrijving"] }}</a>
+                    <br>
+                {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}

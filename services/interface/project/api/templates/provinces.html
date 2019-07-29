@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+    <div>
+        {% if provs %}
+            Following provinces are available:<br>
+                {% for prov in provs %}
+                    {{ prov['omschrijving'] }}
+                    &emsp;
+                    <a href="/view_stops_province/{{ prov['entiteitnummer'] }}">All stops for this province</a>
+                    &emsp;
+                    <a href="/view_lines/{{ prov['entiteitnummer'] }}">All lines for this province</a>
+                    &emsp;
+                    <a href="/view_locations/{{ prov['entiteitnummer'] }}">All locations for this province</a>
+                    <br>
+                {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}

@@ -4,17 +4,12 @@
         {% if message %}
             {{ message }}<br>
         {% endif %}
-        {% if users %}
-            Following users are found in the database:<br>
-            {% for user in users %}
-                {{ user.email }}<br>
-            {% endfor %}
-        {% endif %}
     </div>
     <div>
         Click on one of the items in the sidebar to continue.
-        <li>The 'Users' tab will allow you to register yourself.</li>
-        <li>The 'Vehicles' tab will allow you to add or remove a vehicle.</li>
-        <li>The 'Ratings' tab will allow you to rate a vehicle.</li>
+        <li>In the 'Users' tab you can register yourself.</li>
+        <li>In the 'Vehicles' tab you can add or remove a vehicle.</li>
+        <li>In the 'Stops' tab you can search for a specific stop.</li>
+        <li>In the 'Ratings' tab you can rate a vehicle or stop.</li>
     </div>
 {% endblock %}

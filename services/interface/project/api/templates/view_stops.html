@@ -6,7 +6,7 @@
             {% if stops|length > 0 %}
                 <div class="col" style="overflow-y: scroll; height:600px;">
                     {% for stop in stops %}
-                        {{ stop.stop }} located in {{ stop.location }} has a score of {{ stop.average_score }}<br>
+                        <a href="/rate_stop/{{ stop.id }}">{{ stop.stop }}</a> located in {{ stop.location }} has a score of {{ stop.average_score }}<br>
                     {% endfor %}
                 </div>
             {% else %}
@@ -19,7 +19,7 @@
                     {% if stops_to|length > 0 %}
                         <div class="col" style="overflow-y: scroll; height:600px;">
                             {% for stop in stops_to %}
-                                {{ stop.stop }} located in {{ stop.location }} has a score of {{ stop.average_score }}<br>
+                                <a href="/rate_stop/{{ stop.id }}">{{ stop.stop }}</a> located in {{ stop.location }} has a score of {{ stop.average_score }}<br>
                             {% endfor %}
                         </div>
                     {% else %}
@@ -31,7 +31,7 @@
                     {% if stops_from|length > 0 %}
                         <div class="col" style="overflow-y: scroll; height:600px;">
                             {% for stop in stops_from %}
-                                {{ stop.stop }} located in {{ stop.location }} has a score of {{ stop.average_score }}<br>
+                                <a href="/rate_stop/{{ stop.id }}">{{ stop.stop }}</a> located in {{ stop.location }} has a score of {{ stop.average_score }}<br>
                             {% endfor %}
                         </div>
                     {% else %}
