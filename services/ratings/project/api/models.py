@@ -8,15 +8,17 @@ class Rating(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     rating_for = db.Column(db.String(128), nullable=False)
     score = db.Column(db.Float(), nullable=False)
-    description = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.String(250), nullable=False)
     rating_type = db.Column(db.Integer, default=0, nullable=False)     # 0 for vehicle, 1 for stop
+    rated_by = db.Column(db.String(250), nullable=False)
     created_date = db.Column(db.DateTime, default=func.now(), nullable=False)
 
-    def __init__(self, rating_for, score, description, rating_type):
+    def __init__(self, rating_for, score, description, rating_type, rated_by):
         self.rating_for = rating_for
         self.score = score
         self.description = description
         self.rating_type = rating_type
+        self.rated_by = rated_by
 
     def to_json(self):
         return {
@@ -24,5 +26,6 @@ class Rating(db.Model):
             'rating_for': self.rating_for,
             'score': self.score,
             'description': self.description,
-            'rating_type': self.rating_for
+            'rating_type': self.rating_for,
+            'rated_by': self.rated_by
         }

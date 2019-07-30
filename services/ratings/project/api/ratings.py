@@ -30,7 +30,8 @@ def rate_vehicle():
         user_data = user_status.json()
         if vehicle_data["status"] == 'success' and user_data['status'] == 'success':
             print("Authentication success and vehicle exists")
-            db.session.add(Rating(rating_for=str(number), score=float(score), description=description, rating_type=0))
+            db.session.add(Rating(rating_for=str(number), score=float(score), description=description, rating_type=0,
+                                  rated_by=email))
             db.session.commit()
             vhs = db.session.query(Rating).filter_by(rating_for=str(number), rating_type=0).all()
             sum = 0.0
@@ -74,7 +75,8 @@ def rate_stop():
         user_data = user_status.json()
         if stop_data["status"] == 'success' and user_data['status'] == 'success':
             print("Authentication success and stop exists")
-            db.session.add(Rating(rating_for=str(number), score=float(score), description=description, rating_type=1))
+            db.session.add(Rating(rating_for=str(number), score=float(score), description=description, rating_type=1,
+                                  rated_by=email))
             db.session.commit()
             stops = db.session.query(Rating).filter_by(rating_for=str(number), rating_type=1).all()
             sum = 0.0
@@ -95,13 +97,13 @@ def rate_stop():
         return jsonify(response_object), 400
 
 
-@ratings_blueprint.route('/ratings', methods=['GET'])
-def get_all_ratings():
-    """Get all ratings"""
+@ratings_blueprint.route('/ratings/<rfor>/<rtype>', methods=['GET'])
+def ratings(rfor, rtype):
     response_object = {
         'status': 'success',
         'data': {
-            'ratings': [rating.to_json() for rating in Rating.query.all()]
+            'ratings': [rating.to_json() for rating in
+                        list(set(Rating.query.filter_by(rating_for=rfor, rating_type=rtype)))]
         }
     }
     return jsonify(response_object), 200

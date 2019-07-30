@@ -149,36 +149,51 @@ def view_all_stops():
 @UI_blueprint.route("/view_stops_province/<prov>", methods=['POST', 'GET'])
 def view_stops_province(prov):
     stops = requests.get("http://stops:5003/stops/get_prov/{0}".format(prov))
-    return render_template("view_stops.html", stops=stops.json()['data']['stops'])
+    if stops.json()['status'] == 'success':
+        return render_template("view_stops.html", stops=stops.json()['data']['stops'])
+    else:
+        return render_template("index.html", message=stops.json()['data']['message'])
 
 
 @UI_blueprint.route("/search", methods=['POST', 'GET'])
 def search():
     provs = requests.get("http://stops:5003/stops/getProvs")
-    return render_template("provinces.html", provs=provs.json()['data']['provinces'])
+    if provs.json()['status'] == 'success':
+        return render_template("provinces.html", provs=provs.json()['data']['provinces'])
+    else:
+        return render_template("index.html", message=provs.json()['data']['message'])
 
 
 @UI_blueprint.route('/view_stops_location/<loc>', methods=['POST', 'GET'])
 def view_stops_location(loc):
     stops = requests.get("http://stops:5003/stops/get_stops_location/{0}".format(loc))
-    return render_template("view_stops.html", stops=stops.json()['data']['stops'])
+    if stops.json()['status'] == 'success':
+        return render_template("view_stops.html", stops=stops.json()['data']['stops'])
+    else:
+        return render_template("index.html", message=stops.json()['data']['message'])
 
 
 @UI_blueprint.route('/view_locations/<prov>', methods=['POST', 'GET'])
 def view_locations(prov):
     locs = requests.get("http://stops:5003/stops/get_locations/{0}".format(prov))
-    return render_template("view_locations.html", locs=locs.json()['data']['locations'])
+    if locs.json()['status'] == 'success':
+        return render_template("view_locations.html", locs=locs.json()['data']['locations'])
+    else:
+        return render_template("index.html", message=locs.json()['data']['message'])
 
 
 @UI_blueprint.route('/view_lines/<prov>', methods=['POST', 'GET'])
 def view_lines(prov):
     lines = requests.get("http://stops:5003/stops/get_lines/{0}".format(prov))
-    provs = requests.get("http://stops:5003/stops/getProvs")
-    prov_name = 0
-    for p in provs.json()['data']['provinces']:
-        if p['entiteitnummer'] == prov:
-            prov_name = p['omschrijving']
-    return render_template("view_lines.html", prov=prov, prov_name=prov_name, lines=lines.json()['data']['lines'])
+    if lines.json()['status'] == 'success':
+        provs = requests.get("http://stops:5003/stops/getProvs")
+        prov_name = 0
+        for p in provs.json()['data']['provinces']:
+            if p['entiteitnummer'] == prov:
+                prov_name = p['omschrijving']
+        return render_template("view_lines.html", prov=prov, prov_name=prov_name, lines=lines.json()['data']['lines'])
+    else:
+        return render_template('index.html', message=lines.json()['data']['message'])
 
 
 @UI_blueprint.route('/view_stops_line/<prov>/<line>', methods=['POST', 'GET'])
@@ -187,10 +202,17 @@ def view_stops_line(prov, line):
     stops_from = requests.get("http://stops:5003/stops/get_stops_line_prov_from/{0}/{1}".format(line, prov))
     to_stops = stops_to.json()['data']['stops']
     from_stops = stops_from.json()['data']['stops']
-    if to_stops is None:
-        to_stops = []
-    if from_stops is None:
-        from_stops = []
     return render_template("view_stops.html", stops_to=to_stops, stops_from=from_stops)
 
 
+@UI_blueprint.route('/stop_details/<id>', methods=['POST', 'GET'])
+def stop_details(id):
+    stop = requests.get("http://stops:5003/get_stop/{0}".format(id))
+    stop = stop.json()
+    if stop['status'] == 'success':
+        stop = stop['data']['stop']
+        ratings = requests.get("http://ratings:5002/ratings/{0}/{1}".format(stop['id'], 1))
+        return render_template('details.html', data=stop, stop=True, vehicle=False,
+                               records=ratings.json()['data']['ratings'])
+    else:
+        return render_template('index.html', message=stop['data']['message'])

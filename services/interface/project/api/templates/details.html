@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+    <div>
+        {% if data %}
+            <div class="row">
+                <div class="col">
+                    {% if stop == True %}
+                        Details about the stop:<br>
+                        <div class="col">
+                            <li>{{ data['stop'] }}</li>
+                            <li>Located in {{ data['location'] }}, {{ data['prov'] }}</li>
+                            <li>Coordinates: ({{ data['lat'] }}, {{ data['lon'] }})</li>
+                            <li>Average score: {{ data['average_score'] }}</li>
+                        </div>
+                    {% elif vehicle == True %}
+                        <div class="col">
+                            On this page you will find reviews from other users for {{ data['type'] }} {{ data['number'] }} with average score {{ data['average score'] }}.<br>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col">
+                    This is what other people have to say:<br>
+                    {% if records|length > 0 %}
+                        <div class="col" style="overflow-y: scroll; height:600px;">
+                            {% for record in records %}
+                                <li>
+                                    {{ record['rated_by'] }}:<br>
+                                    {{ record['score'] }}<br>
+                                    {{ record['description'] }}<br>
+                                </li>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        No stops found for this direction.
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

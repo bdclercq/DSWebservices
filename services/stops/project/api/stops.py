@@ -25,21 +25,8 @@ def get_all_stops():
     return jsonify(response_object), 200
 
 
-# @stops_blueprint.route('/stops/get_loc/<name>', methods=['GET'])
-# def get_stops_location(name):
-#     """Get all stops"""
-#     response_object = {
-#         'status': 'success',
-#         'data': {
-#             'stops': [stop.to_json() for stop in list(set(Stop.query.filter_by(location=name)))]
-#         }
-#     }
-#     return jsonify(response_object), 200
-
-
 @stops_blueprint.route('/stops/get_prov/<prov>', methods=['GET'])
 def get_stops_province(prov):
-    """Get all stops"""
     response_object = {
         'status': 'success',
         'data': {
@@ -51,36 +38,54 @@ def get_stops_province(prov):
 
 @stops_blueprint.route('/stops/getProvs', methods=['POST', 'GET'])
 def getProvs():
-    conn = http.client.HTTPSConnection('delijn.azure-api.net')
-    conn.request("GET", "/DLKernOpenData/api/v1/entiteiten", "{body}", headers)
-    response = conn.getresponse()
-    data = response.read()
-    conn.close()
-    data = json.loads(data)
-    response_object = {
-        'status': 'success',
-        'data': {
-            'provinces': [prov for prov in data["entiteiten"]]
+    try:
+        conn = http.client.HTTPSConnection('delijn.azure-api.net')
+        conn.request("GET", "/DLKernOpenData/api/v1/entiteiten", "{body}", headers)
+        response = conn.getresponse()
+        data = response.read()
+        conn.close()
+        data = json.loads(data)
+        response_object = {
+            'status': 'success',
+            'data': {
+                'provinces': [prov for prov in data["entiteiten"]]
+            }
         }
-    }
-    return jsonify(response_object), 200
+        return jsonify(response_object), 200
+    except:
+        response_object = {
+            'status': 'fail',
+            'data': {
+                'message': 'Please try again later (failure in getting provinces).'
+            }
+        }
+        return jsonify(response_object), 404
 
 
 @stops_blueprint.route('/stops/get_lines/<prov>', methods=['POST', 'GET'])
 def get_lines(prov):
-    conn = http.client.HTTPSConnection('delijn.azure-api.net')
-    conn.request("GET", "/DLKernOpenData/api/v1/entiteiten/{0}/lijnen".format(prov), "{body}", headers)
-    response = conn.getresponse()
-    data = response.read()
-    conn.close()
-    data = json.loads(data)
-    response_object = {
-        'status': 'success',
-        'data': {
-            'lines': [line for line in data["lijnen"]]
+    try:
+        conn = http.client.HTTPSConnection('delijn.azure-api.net')
+        conn.request("GET", "/DLKernOpenData/api/v1/entiteiten/{0}/lijnen".format(prov), "{body}", headers)
+        response = conn.getresponse()
+        data = response.read()
+        conn.close()
+        data = json.loads(data)
+        response_object = {
+            'status': 'success',
+            'data': {
+                'lines': [line for line in data["lijnen"]]
+            }
         }
-    }
-    return jsonify(response_object), 200
+        return jsonify(response_object), 200
+    except:
+        response_object = {
+            'status': 'fail',
+            'data': {
+                'message': 'Please try again later (failure in getting lines).'
+            }
+        }
+        return jsonify(response_object), 404
 
 
 @stops_blueprint.route('/stops/get_stops_line_prov_to/<line>/<prov>', methods=['POST', 'GET'])
@@ -147,21 +152,30 @@ def get_stops_line_prov_from(line, prov):
 
 @stops_blueprint.route('/stops/get_locations/<prov>', methods=['POST', 'GET'])
 def get_locations(prov):
-    conn = http.client.HTTPSConnection('delijn.azure-api.net')
-    conn.request("GET", "/DLKernOpenData/api/v1/entiteiten/{0}/gemeenten".format(prov),"{body}", headers)
-    response = conn.getresponse()
-    data = response.read()
-    conn.close()
-    data = json.loads(data)
-    locs = [loc for loc in data["gemeenten"]]
-    locs = sorted(locs, key=lambda k: k['omschrijving'])
-    response_object = {
-        'status': 'success',
-        'data': {
-            'locations': locs
+    try:
+        conn = http.client.HTTPSConnection('delijn.azure-api.net')
+        conn.request("GET", "/DLKernOpenData/api/v1/entiteiten/{0}/gemeenten".format(prov),"{body}", headers)
+        response = conn.getresponse()
+        data = response.read()
+        conn.close()
+        data = json.loads(data)
+        locs = [loc for loc in data["gemeenten"]]
+        locs = sorted(locs, key=lambda k: k['omschrijving'])
+        response_object = {
+            'status': 'success',
+            'data': {
+                'locations': locs
+            }
         }
-    }
-    return jsonify(response_object), 200
+        return jsonify(response_object), 200
+    except:
+        response_object = {
+            'status': 'fail',
+            'data': {
+                'message': 'Please try again later (failure in getting locations).'
+            }
+        }
+        return jsonify(response_object), 404
 
 
 @stops_blueprint.route('/stops/get_stops_location/<loc>', methods=['POST', 'GET'])
@@ -211,7 +225,45 @@ def get_name(id):
         response_object = {
             'status': 'fail',
             'data': {
-                'message': "Cannot find stop with that ID."
+                'message': "Cannot find stop with ID {0}.".format(id)
+            }
+        }
+        return jsonify(response_object), 404
+
+
+@stops_blueprint.route('/get_stop/<id>', methods=['GET', 'POST'])
+def get_stop(id):
+    try:
+        stop = db.session.query(Stop).filter(Stop.id==id).first()
+        try:
+            response_object = {
+                'status': 'success',
+                'data': {
+                    'stop': {
+                        'id': stop.id,
+                        'stop': stop.stop_name,
+                        'location': stop.location,
+                        'lat': stop.lat,
+                        'lon': stop.lon,
+                        'prov': stop.province,
+                        'average_score': stop.avg_score
+                    }
+                }
+            }
+            return jsonify(response_object), 200
+        except:
+            response_object = {
+                'status': 'fail',
+                'data': {
+                    'message': 'Cannot transform stop with ID {0} into json.'.format(id)
+                }
+            }
+            return jsonify(response_object), 404
+    except:
+        response_object = {
+            'status': 'fail',
+            'data': {
+                'message': 'Cannot find stop with ID {0}.'.format(id)
             }
         }
         return jsonify(response_object), 404
