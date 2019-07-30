@@ -37,7 +37,7 @@
             {% if vehicles %}
                 <ol>
                     {% for vehicle in vehicles %}
-                        <li>{{ vehicle["type"] }} with number {{ vehicle["number"] }} and rating {{ vehicle["average score"] }} </li>
+                        <li>{{ vehicle["type"] }} with ID {{ vehicle["id"] }} and rating {{ vehicle["average score"] }} </li>
                     {% endfor %}
                 </ol>
             {% else %}

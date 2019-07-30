@@ -1,16 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
-
-    {% if message %}
-        {{ message }}<br>
-        Please try again.<br>
-    {% endif %}
-
     <div class="container">
         <div class="column is-one-third">
             <br>
-            <h1 class="title">Rating</h1>
+            <h1 class="title">Ratings</h1>
             <hr>
+            {% if message %}
+                {{ message }}<br>
+            {% endif %}
             <br>
         <a href="/rate_vehicles">Rate a vehicle</a><br>
         <a href="/rate_stops">Rate a stop</a><br>
@@ -18,7 +15,12 @@
             {% if vehicles %}
                 <ol>
                     {% for vehicle in vehicles %}
-                        <li>{{ vehicle["type"] }} with number {{ vehicle["number"] }} and rating {{ vehicle["average score"] }}</li>
+                        <li>Found
+                            <a href="/vehicle_details/{{ vehicle["id"] }}">
+                                {{ vehicle["type"] }} with ID {{ vehicle["id"] }}
+                            </a>
+                            and rating {{ vehicle["average score"] }}
+                        </li>
                     {% endfor %}
                 </ol>
             {% else %}
@@ -26,5 +28,4 @@
             {% endif %}
         </div>
     </div>
-
 {% endblock %}

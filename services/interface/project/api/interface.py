@@ -81,6 +81,21 @@ def remove_vehicle():
         return render_template('index.html', message=result['message'],
                                users=requests.get("http://users:5001/get_users").json()['data']['users'])
 
+
+@UI_blueprint.route('/vehicle_details/<number>', methods=['POST', 'GET'])
+def vehicle_details(number):
+    vehicle = requests.get("http://vehicles:5004/get_vehicle/{0}".format(number))
+    vehicle = vehicle.json()
+    provs = requests.get("http://stops:5003/stops/getProvs")
+    if vehicle['status'] == 'success':
+        vehicle = vehicle['data']['vehicle']
+        ratings = requests.get("http://ratings:5002/ratings/{0}/{1}".format(vehicle['id'], 0))
+        return render_template('details.html', data=vehicle, stop=False, vehicle=True,
+                               records=ratings.json()['data']['ratings'], provs=provs.json()['data']['provinces'])
+    else:
+        return render_template('index.html', message=stop['data']['message'])
+
+
 ################################################################
 
 
@@ -207,12 +222,13 @@ def view_stops_line(prov, line):
 
 @UI_blueprint.route('/stop_details/<id>', methods=['POST', 'GET'])
 def stop_details(id):
+    provs = requests.get("http://stops:5003/stops/getProvs")
     stop = requests.get("http://stops:5003/get_stop/{0}".format(id))
     stop = stop.json()
     if stop['status'] == 'success':
         stop = stop['data']['stop']
         ratings = requests.get("http://ratings:5002/ratings/{0}/{1}".format(stop['id'], 1))
         return render_template('details.html', data=stop, stop=True, vehicle=False,
-                               records=ratings.json()['data']['ratings'])
+                               records=ratings.json()['data']['ratings'], provs=provs.json()['data']['provinces'])
     else:
         return render_template('index.html', message=stop['data']['message'])

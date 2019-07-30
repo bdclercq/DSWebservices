@@ -1,25 +1,33 @@
 {% extends "base.html" %}
 {% block content %}
-    <div>
-        {% if message %}
-            {{ message }}<br>
-            Please try again.<br>
-        {% endif %}
-        {% if users %}
-            Following users are found in the database:<br>
-            {% for user in users %}
-                {{ user.email }}<br>
-            {% endfor %}
-        {% endif %}
-        <form action="/add_user" method="post">
-            <div>
-                <input type="email" name="email">
-            </div>
-            <div>
-                <input type="password" name="pwd">
-            </div>
+    <div class="container">
+        <div class="column is-one-third">
+            <br>
+            <h1 class="title">Register</h1>
+            <hr>
+            {% if message %}
+                {{ message }}<br>
+                Please try again.<br>
+            {% endif %}
+            <br>
+            <form action="/add_user" method="post">
+                <div>
+                    <input type="email" name="email">
+                </div>
+                <div>
+                    <input type="password" name="pwd">
+                </div>
 
-            <input type="submit" value="Register">
-        </form>
+                <input type="submit" value="Register">
+            </form>
+        <br>
+        <br>
+            {% if users %}
+                Following users are found in the database:<br>
+                {% for user in users %}
+                    {{ user.email }}<br>
+                {% endfor %}
+            {% endif %}
+        </div>
     </div>
 {% endblock %}

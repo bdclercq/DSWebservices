@@ -1,8 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
-    <div>
-        {% if provs %}
-            Following provinces are available:<br>
+    <div class="container">
+        <div class="column is-one-third">
+            <br>
+            <h1 class="title">Start your search</h1>
+            <hr>
+            <br>
+            {% if provs %}
+            Please select one of the following options:<br>
                 {% for prov in provs %}
                     {{ prov['omschrijving'] }}
                     &emsp;
@@ -14,5 +19,6 @@
                     <br>
                 {% endfor %}
         {% endif %}
+        </div>
     </div>
 {% endblock %}

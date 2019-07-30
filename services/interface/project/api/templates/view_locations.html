@@ -1,13 +1,19 @@
 {% extends "base.html" %}
 {% block content %}
-    <div>
-        {% if locs %}
-            Following locations are available:<br>
-                {% for loc in locs %}
-{#                    <a href="/view_stops_location/{{ loc["omschrijving"] }}">{{ loc["omschrijving"] }}</a>#}
-                    <a href="/view_stops_location/{{ loc["gemeentenummer"] }}">{{ loc["omschrijving"] }}</a>
-                    <br>
-                {% endfor %}
-        {% endif %}
+    <div class="container">
+        <div class="column is-one-third">
+            <br>
+            <h1 class="title">System found these locations</h1>
+            <hr>
+            <br>
+            {% if locs %}
+                <div class="col" style="overflow-y: scroll; height:600px;">
+                    {% for loc in locs %}
+                        <a href="/view_stops_location/{{ loc["gemeentenummer"] }}">{{ loc["omschrijving"] }}</a>
+                        <br>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
     </div>
 {% endblock %}

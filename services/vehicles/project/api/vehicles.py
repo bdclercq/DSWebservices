@@ -22,7 +22,7 @@ def add_vehicle():
     email = post_data['email']
     password = post_data['password']
     try:
-        vehicle_exists = db.session.query(Vehicle.number).filter_by(number=number).scalar() is not None
+        vehicle_exists = db.session.query(Vehicle.id).filter_by(id=number).scalar() is not None
         if not vehicle_exists:
             status = requests.get("http://users:5001/authenticate/{0},{1}".format(email, password))
             data = status.json()
@@ -36,16 +36,16 @@ def add_vehicle():
                 response_object['message'] = "Sorry, username/password combo not found."
                 return jsonify(response_object), 400
         else:
-            response_object['message'] = "Vehicle already exists."
+            response_object['message'] = "Vehicle ID has already been taken."
             return jsonify(response_object), 400
     except exc.IntegrityError as e:
         db.session.rollback()
-        response_object['message'] = "An error occurred, please try again later."
+        response_object['message'] = str(e)
         return jsonify(response_object), 400
 
 
 @vehicles_blueprint.route('/vehicles', methods=['GET'])
-def get_all_ratings():
+def get_all_vehicles():
     """Get all vehicles"""
     response_object = {
         'status': 'success',
@@ -63,7 +63,7 @@ def check_exists(number):
         'message': 'Vehicle does not exist'
     }
     try:
-        exists = Vehicle.query.filter_by(number=number).scalar() is not None
+        exists = Vehicle.query.filter_by(id=number).scalar() is not None
         if not exists:
             return jsonify(response_object), 404
         else:
@@ -88,12 +88,12 @@ def remove_vehicle():
     email = post_data['email']
     password = post_data['password']
     try:
-        vehicle_exists = db.session.query(Vehicle.number).filter_by(number=number).scalar() is not None
+        vehicle_exists = db.session.query(Vehicle.id).filter_by(id=number).scalar() is not None
         if vehicle_exists:
             status = requests.get("http://users:5001/authenticate/{0},{1}".format(email, password))
             data = status.json()
             if data['status'] == 'success':
-                vehicle = db.session.query(Vehicle).filter_by(number=number).first()
+                vehicle = db.session.query(Vehicle).filter_by(id=number).first()
                 if vehicle.avg_score == 0.0 and vehicle.creator == email:
                     db.session.delete(vehicle)
                     db.session.commit()
@@ -122,7 +122,7 @@ def update_score(vid, score):
         'message': 'Invalid payload.'
     }
     try:
-        vehicle = db.session.query(Vehicle).filter_by(number=vid).first()
+        vehicle = db.session.query(Vehicle).filter_by(id=vid).first()
         vehicle.avg_score = float(score)
         db.session.commit()
         response_object['status'] = 'success'
@@ -132,3 +132,38 @@ def update_score(vid, score):
         db.session.rollback()
         response_object['message'] = "An error occurred, please try again later."
         return jsonify(response_object), 400
+
+
+@vehicles_blueprint.route('/get_vehicle/<number>', methods=['POST', 'GET'])
+def get_vehicle(number):
+    try:
+        vehicle = db.session.query(Vehicle).filter_by(id=number).first()
+        try:
+            response_object = {
+                'status': 'success',
+                'data': {
+                    'vehicle': {
+                        'id': vehicle.id,
+                        'type': vehicle.type,
+                        'average score': vehicle.avg_score,
+                        'creator': vehicle.creator
+                    }
+                }
+            }
+            return jsonify(response_object), 200
+        except:
+            response_object = {
+                'status': 'fail',
+                'data': {
+                    'message': 'Cannot transform vehicle into json.'
+                }
+            }
+            return jsonify(response_object), 404
+    except:
+        response_object = {
+            'status': 'fail',
+            'data': {
+                'message': 'Cannot find {0} with number {1}.'.format(vtype, number)
+            }
+        }
+        return jsonify(response_object), 404

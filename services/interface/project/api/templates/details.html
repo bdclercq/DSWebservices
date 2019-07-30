@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-    <div>
+    <div class="container">
+        <h1 class="title">Detail page</h1>
+            <hr>
         {% if data %}
             <div class="row">
                 <div class="col">
@@ -10,11 +12,23 @@
                             <li>{{ data['stop'] }}</li>
                             <li>Located in {{ data['location'] }}, {{ data['prov'] }}</li>
                             <li>Coordinates: ({{ data['lat'] }}, {{ data['lon'] }})</li>
-                            <li>Average score: {{ data['average_score'] }}</li>
+                            <li>Average rated score: {{ data['average_score'] }}</li>
+                        </div>
+                        <br>
+                        <br>
+                        About provinces:<br>
+                        <div class="col">
+                            {% if provs %}
+                                {% for prov in provs %}
+                                    {{ prov['entiteitnummer'] }} <=> {{ prov['omschrijving'] }}<br>
+                                {% endfor %}
+                            {% endif %}
                         </div>
                     {% elif vehicle == True %}
                         <div class="col">
-                            On this page you will find reviews from other users for {{ data['type'] }} {{ data['number'] }} with average score {{ data['average score'] }}.<br>
+                            <li>Vehicle type: {{ data['type'] }}</li>
+                            <li>Vehicle ID: {{ data['id'] }}</li>
+                            <li>Vehicle score: {{ data['average score'] }}</li>
                         </div>
                     {% endif %}
                 </div>
@@ -31,7 +45,7 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        No stops found for this direction.
+                        No ratings yet.
                     {% endif %}
                 </div>
             </div>
