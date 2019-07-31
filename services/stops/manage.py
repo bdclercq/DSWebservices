@@ -45,11 +45,11 @@ def seed_db():
             lat = float(stop['geoCoordinaat']['latitude'])
             lon = float(stop['geoCoordinaat']['longitude'])
             # print(i, len(data["haltes"]))
-            print(name, ', ', number, ', ', location, ', ', prov, ', ', lat, ', ', lon)
+            # print(name, ', ', number, ', ', location, ', ', prov, ', ', lat, ', ', lon)
             db.session.add(Stop(nr=number, stop_name=name, location=location, lat=lat, lon=lon, prov=prov))
             db.session.commit()
         except KeyError as ke:
-            print("Cannot add stop: ", str(ke))
+            # print("Cannot add stop: ", str(ke))
             failed_count += 1
             pass
     print("From ", total_stops, ", ", total_stops-failed_count, " were added")

@@ -94,14 +94,18 @@ def remove_vehicle():
             data = status.json()
             if data['status'] == 'success':
                 vehicle = db.session.query(Vehicle).filter_by(id=number).first()
-                if vehicle.avg_score == 0.0 and vehicle.creator == email:
+                ratings = requests.get("http://ratings:5002/ratings/{0}/{1}".format(number, 0))
+                ratings = ratings.json()['data']['ratings']
+                # If the vehicle hasn't been rated yet or the only rating is from yourself
+                # and you are the one who created it: remove the vehicle
+                if (vehicle.avg_score == 0.0 or (len(ratings) == 1 and ratings[0]['rated_by'] == email)) and vehicle.creator == email:
                     db.session.delete(vehicle)
                     db.session.commit()
                     response_object['status'] = 'success'
                     response_object['message'] = 'Vehicle was removed'
                     return jsonify(response_object), 201
                 else:
-                    response_object['message'] = 'The vehicle cannot be removed, it has already been rated or has been added by another user (not you).'
+                    response_object['message'] = 'The vehicle cannot be removed: it has already been rated or has been added by another user (not you).'
                     return jsonify(response_object), 400
             else:
                 response_object['message'] = 'Sorry, username/password combo not found.'
@@ -111,7 +115,7 @@ def remove_vehicle():
             return jsonify(response_object), 400
     except exc.IntegrityError as e:
         db.session.rollback()
-        response_object['message'] = "An error occurred, please try again later."
+        response_object['message'] = "An error occurred, please try again later.\n", str(e)
         return jsonify(response_object), 400
 
 

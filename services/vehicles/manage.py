@@ -16,11 +16,11 @@ def recreate_db():
     db.session.commit()
 
 
-@cli.command()
-def seed_db():
-    """Seeds the database."""
-    db.session.add(Vehicle(type='bus', number=33))
-    db.session.commit()
+# @cli.command()
+# def seed_db():
+#     """Seeds the database."""
+#     db.session.add(Vehicle(type='bus', number=33))
+#     db.session.commit()
 
 
 if __name__ == '__main__':

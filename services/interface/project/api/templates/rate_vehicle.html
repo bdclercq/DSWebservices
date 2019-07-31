@@ -45,11 +45,12 @@
             <br>
             <hr>
             {% if vehicles %}
-                <ol>
-                    {% for vehicle in vehicles %}
-                        <li>{{ vehicle["type"] }} with number {{ vehicle["number"] }} and rating {{ vehicle["average score"] }} <a href="/remove_vehicle/{{ vehicle["number"] }}">Remove</a></li>
-                    {% endfor %}
-                </ol>
+                {% for vehicle in vehicles %}
+                    <li>
+                        Found {{ vehicle["type"] }} with ID {{ vehicle["id"] }} and rating {{ vehicle["average score"] }}
+                        <a href="/remove_vehicle/{{ vehicle["id"] }}">Remove</a>
+                    </li>
+                {% endfor %}
             {% else %}
                 <p>No vehicles!</p>
             {% endif %}
