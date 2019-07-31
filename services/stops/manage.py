@@ -49,13 +49,14 @@ def seed_db():
             db.session.add(Stop(nr=number, stop_name=name, location=location, lat=lat, lon=lon, prov=prov))
             db.session.commit()
         except KeyError as ke:
+            # Catch fields that don't exist
             # print("Cannot add stop: ", str(ke))
             failed_count += 1
             pass
+        except:
+            # Continue if the stops already exists
+            pass
     print("From ", total_stops, ", ", total_stops-failed_count, " were added")
-
-    # db.session.add(Stop(stop_name='Burgemeester Nolf', location="Merksem"))
-    # db.session.commit()
 
 
 if __name__ == '__main__':

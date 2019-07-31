@@ -25,6 +25,42 @@ def get_all_stops():
     return jsonify(response_object), 200
 
 
+@stops_blueprint.route('/stops/refresh', methods=['GET'])
+def refresh():
+    """Get all stops"""
+    response_object = {
+        'status': 'success',
+        'message': 'Action was successful'
+    }
+    try:
+        conn = http.client.HTTPSConnection('delijn.azure-api.net')
+        conn.request("GET", "/DLKernOpenData/v1/beta/haltes", "{body}", headers)
+        response = conn.getresponse()
+        data = response.read()
+        conn.close()
+        data = json.loads(data)
+        for stop in data['haltes']:
+            try:
+                name = stop['omschrijving']
+                number = stop['haltenummer']
+                location = stop['omschrijvingGemeente']
+                prov = int(stop['entiteitnummer'])
+                lat = float(stop['geoCoordinaat']['latitude'])
+                lon = float(stop['geoCoordinaat']['longitude'])
+                db.session.add(Stop(nr=number, stop_name=name, location=location, lat=lat, lon=lon, prov=prov))
+                db.session.commit()
+            except KeyError as ke:
+                # Catch fields that don't exist
+                pass
+            except:
+                # Continue if the stops already exists
+                pass
+    except:
+        response_object['status'] = 'fail'
+        response_object['message'] = 'Something went wrong'
+    return jsonify(response_object), 200
+
+
 @stops_blueprint.route('/stops/get_prov/<prov>', methods=['GET'])
 def get_stops_province(prov):
     response_object = {

@@ -109,3 +109,25 @@ def ratings(rfor, rtype):
     return jsonify(response_object), 200
 
 
+@ratings_blueprint.route('/ratings/remove/<rfor>/<rtype>', methods=['GET'])
+def remove(rfor, rtype):
+    response_object = {
+        'status': 'success',
+        'data': {
+            'message': 'Ratings were removed successfully.'
+        }
+    }
+    ratings = db.session.query(Rating).filter_by(rating_for=rfor, rating_type=rtype).all()
+    if len(ratings) >= 1:
+        try:
+            for rating in ratings:
+                db.session.delete(rating)
+                db.session.commit()
+        except:
+            response_object['status'] = 'fail'
+            response_object['message'] = 'Cannot remove ratings.'
+    else:
+        response_object['message'] = 'No ratings to remove.'
+    return jsonify(response_object), 200
+
+

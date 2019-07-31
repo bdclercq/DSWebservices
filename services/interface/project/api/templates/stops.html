@@ -6,9 +6,13 @@
             <br>
             <h1 class="title">All stops</h1>
             <hr>
+            {% if message %}
+                {{ message }}<br>
+            {% endif %}
             <br>
         <a href="/view_stops">Get all stops</a><br>
         <a href="/search">Search for a specific stop</a><br>
+        <a href="/refresh">Check for new stops (this may take a few minutes)</a>
             <hr>
             {% if stops %}
                 There are {{ stops|length }} stops found in the database.

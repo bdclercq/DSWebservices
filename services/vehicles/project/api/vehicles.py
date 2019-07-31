@@ -99,11 +99,16 @@ def remove_vehicle():
                 # If the vehicle hasn't been rated yet or the only rating is from yourself
                 # and you are the one who created it: remove the vehicle
                 if (vehicle.avg_score == 0.0 or (len(ratings) == 1 and ratings[0]['rated_by'] == email)) and vehicle.creator == email:
-                    db.session.delete(vehicle)
-                    db.session.commit()
-                    response_object['status'] = 'success'
-                    response_object['message'] = 'Vehicle was removed'
-                    return jsonify(response_object), 201
+                    removed = requests.get("http://ratings:5002/ratings/remove/{0}/{1}".format(number, 0))
+                    if removed.json()['status'] == 'success':
+                        db.session.delete(vehicle)
+                        db.session.commit()
+                        response_object['status'] = 'success'
+                        response_object['message'] = 'Vehicle was removed'
+                        return jsonify(response_object), 201
+                    else:
+                        response_object['message'] = 'Vehicle cannot be removed, problem with removing corresponding ratings.'
+                        return jsonify(response_object), 400
                 else:
                     response_object['message'] = 'The vehicle cannot be removed: it has already been rated or has been added by another user (not you).'
                     return jsonify(response_object), 400

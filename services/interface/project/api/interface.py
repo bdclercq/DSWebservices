@@ -155,6 +155,17 @@ def stops_management():
     return render_template("stops.html", stops=stops.json()['data']['stops'])
 
 
+@UI_blueprint.route('/refresh', methods=['POST', 'GET'])
+def refresh():
+    status = requests.get("http://stops:5003/stops/refresh")
+    status = status.json()['status']
+    if status == 'success':
+        stops = requests.get("http://stops:5003/stops")
+        return render_template("stops.html", stops=stops.json()['data']['stops'], message='Update succeeded!')
+    else:
+        return render_template('index.html', message='There was a problem with searching for new stops, please try again later.')
+
+
 @UI_blueprint.route("/view_stops", methods=['POST', 'GET'])
 def view_all_stops():
     stops = requests.get("http://stops:5003/stops")
