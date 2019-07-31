@@ -40,12 +40,12 @@ Linux users will need to run the \texttt{install.sh} script to ensure a correct 
 Once Docker is up and running it is time to make everything ready for use.\\
 The first thing you need to do is execute the \texttt{run.sh} script on Mac/Linux while Windows users will need to execute the \texttt{run.bat} script.\\
 When the services are up and running the user will need to open a second terminal and execute the \texttt{create\_dbs.sh} script on Mac/Linux or the \texttt{create\_dbs.bat} script on Windows. This  will create the necessary tables and also fill the database with all stops available at that time in order to prevent long loading times when using the app.
-
 \newpage
 
 \section{Usage}
-After completing the set-up, the app can be launched by running \texttt{run} script for the corresponding OS.\\
+After completing the set-up, the app can be launched by running \texttt{run} script for the corresponding OS and will be available at \url{http://localhost:5000/}.\\
 Following pages will describe how the different aspects can be used.
+\newpage
 \subsection{Home}
 \begin{center}
 	\includegraphics[width=\linewidth]{Images/Home_screen.png}
@@ -175,6 +175,65 @@ Once the form is submitted, the user will be redirected to the home page where a
 \end{center}
 Selecting the `Rate a stop' option will take the user to the search page for a stop. When the desired stop is found, the user simply needs to click on the name of the stop to be redirected to the rating form.\\
 Once the form is submitted, the user will be redirected to the home page where a message will be shown telling whether the operation was successful or not.
+
+\subsubsection{Updating a review}
+If a user would like to update their review, all they need to do is fill out the form again and submit it.
+\newpage
+
+\section{Architecture}
+The application consists of 5 services: \textbf{Users}, \textbf{Vehicles}, \textbf{Stops}, \textbf{Ratings} and \textbf{Interface}.\\
+The \textbf{Users}, \textbf{Vehicles}, \textbf{Stops} and \textbf{Ratings} service each have their own database. 
+
+\subsection{Users service}
+The \textbf{Users} service handles all things related to registering and authenticating users. This service makes no calls to any other services.\\ 
+Email-password combinations are stored in the database belonging to this service.
+
+\subsection{Vehicles service}
+The \textbf{Vehicles} service handles all things related to adding and removing a vehicle, updating the average score and retrieving a certain vehicle. This service makes calls to the \textbf{Users} and \textbf{Ratings} services.\\
+All vehicles are stored in the database belonging to this service.
+
+\subsection{Stops service}
+The \textbf{Stops} service handles the searching for a stop and checking for new stops. This service only makes calls to the API of DeLijn and to no other services.\\ 
+All stops are stored in the database belonging to this service.
+
+\subsection{Ratings service}
+The \textbf{Ratings} service handles the rating of vehicles and stops. This service makes calls to the \textbf{Vehicles}, \textbf{Users} and \textbf{Stops} services.\\
+All ratings are stored in the database belonging to this service.
+
+\subsection{Interface service}
+The \textbf{Interface} only provides the web pages. This service has no underlying database and makes calls to all other services.
+
+\subsection{Diagram}
+\begin{center}
+	\includegraphics[width=\linewidth]{Images/Architecture.png}
+	\captionof{figure}{Architecture}
+\end{center}
+This diagram was automatically generated based on the \textbf{docker-compose.yml} file by running following command in the root directory:\\
+\texttt{docker run --rm -it --name dcv -v \$(pwd):/input pmsipilot/docker-compose-viz render} .
+
+\newpage
+
+\section{Tools and choices}
+
+\subsection{Tools used}
+Following tools were used in creating this app:
+\begin{itemize}
+	\item Basics:
+	\begin{itemize}
+		\item Flask: framework of the app.
+		\item Flask-SQLAlchemy: together with postgresql, this provides the database system of the app.
+		\item psycopg2: Python-PostgreSQL Database Adapter.
+	\end{itemize}
+	\item Others:
+	\begin{itemize}
+		\item requests module: makes it easier to perform http calls.
+	\end{itemize}
+\end{itemize}
+
+\subsection{Choices made}
+For this project I chose to split the system up in 5 different services because, in my opinion, this best resembled the philosophy of micro-services. Each service can be substituted by another one that provides equal responses to API calls. \\
+Since each service has it's own database, no problems regarding data will arise when choosing to swap services.
+
 %\maketitle{Setup}
 
 \end{document}

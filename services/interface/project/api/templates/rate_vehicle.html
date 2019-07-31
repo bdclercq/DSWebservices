@@ -48,7 +48,7 @@
                 {% for vehicle in vehicles %}
                     <li>
                         Found {{ vehicle["type"] }} with ID {{ vehicle["id"] }} and rating {{ vehicle["average score"] }}
-                        <a href="/remove_vehicle/{{ vehicle["id"] }}">Remove</a>
+                        <a href="/remove_vehicles">Remove</a>
                     </li>
                 {% endfor %}
             {% else %}

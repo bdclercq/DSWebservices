@@ -30,9 +30,16 @@ def rate_vehicle():
         user_data = user_status.json()
         if vehicle_data["status"] == 'success' and user_data['status'] == 'success':
             print("Authentication success and vehicle exists")
-            db.session.add(Rating(rating_for=str(number), score=float(score), description=description, rating_type=0,
-                                  rated_by=email))
-            db.session.commit()
+            exists = db.session.query(Rating).filter_by(rating_for=str(number), rated_by=email).scalar() is not None
+            if not exists:
+                db.session.add(Rating(rating_for=str(number), score=float(score), description=description, rating_type=0,
+                                      rated_by=email))
+                db.session.commit()
+            else:
+                rating = Rating.query.filter_by(rating_for=str(number), rated_by=email).first()
+                rating.score = score
+                rating.description = description
+                db.session.commit()
             vhs = db.session.query(Rating).filter_by(rating_for=str(number), rating_type=0).all()
             sum = 0.0
             for vh in vhs:
@@ -75,9 +82,18 @@ def rate_stop():
         user_data = user_status.json()
         if stop_data["status"] == 'success' and user_data['status'] == 'success':
             print("Authentication success and stop exists")
-            db.session.add(Rating(rating_for=str(number), score=float(score), description=description, rating_type=1,
-                                  rated_by=email))
-            db.session.commit()
+            exists = db.session.query(Rating).filter_by(rating_for=str(number), rated_by=email).scalar() is not None
+            if not exists:
+                print("Adding new rating")
+                db.session.add(Rating(rating_for=str(number), score=float(score), description=description,
+                                      rating_type=1, rated_by=email))
+                db.session.commit()
+            else:
+                print("Updating rating")
+                rating = Rating.query.filter_by(rating_for=str(number), rated_by=email).first()
+                rating.score = score
+                rating.description = description
+                db.session.commit()
             stops = db.session.query(Rating).filter_by(rating_for=str(number), rating_type=1).all()
             sum = 0.0
             for stop in stops:
@@ -89,8 +105,9 @@ def rate_stop():
                 response_object['status'] = 'success'
                 response_object['message'] = 'Rating was added!'
                 return jsonify(response_object), 201
+
         else:
-            response_object['message'] = 'Sorry, username/password combo or vehicle not found.'
+            response_object['message'] = 'Sorry, username/password combo or stop not found.'
             return jsonify(response_object), 400
     except exc.IntegrityError as e:
         db.session.rollback()

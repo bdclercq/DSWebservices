@@ -2,7 +2,7 @@ version: '3.6'
 
 services:
 
-  users: # Users run
+  users:
     build:
       context: ./services/users
       dockerfile: Dockerfile
@@ -53,7 +53,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
-  ratings: # Ratins don't run
+  ratings:
     build:
       context: ./services/ratings
       dockerfile: Dockerfile
@@ -81,7 +81,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
-  stops: # Stops run
+  stops:
     build:
       context: ./services/stops
       dockerfile: Dockerfile
