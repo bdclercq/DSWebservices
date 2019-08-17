@@ -26,6 +26,6 @@ class Rating(db.Model):
             'rating_for': self.rating_for,
             'score': self.score,
             'description': self.description,
-            'rating_type': self.rating_for,
+            'rating_type': self.rating_type,
             'rated_by': self.rated_by
         }

@@ -19,6 +19,7 @@
 \contentsline {subsubsection}{\numberline {2.5.1}Rating a vehicle}{19}{subsubsection.2.5.1}% 
 \contentsline {subsubsection}{\numberline {2.5.2}Rating a stop}{20}{subsubsection.2.5.2}% 
 \contentsline {subsubsection}{\numberline {2.5.3}Updating a review}{20}{subsubsection.2.5.3}% 
+\contentsline {subsubsection}{\numberline {2.5.4}Removing a review}{20}{subsubsection.2.5.4}% 
 \contentsline {section}{\numberline {3}Architecture}{21}{section.3}% 
 \contentsline {subsection}{\numberline {3.1}Users service}{21}{subsection.3.1}% 
 \contentsline {subsection}{\numberline {3.2}Vehicles service}{21}{subsection.3.2}% 

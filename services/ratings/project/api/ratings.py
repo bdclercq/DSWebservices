@@ -7,6 +7,17 @@ import requests
 ratings_blueprint = Blueprint('ratings', __name__, template_folder='./templates')
 
 
+@ratings_blueprint.route('/ratings', methods=['GET'])
+def get_all():
+    response_object = {
+        'status': 'success',
+        'data': {
+            'ratings': [rating.to_json() for rating in list(set(Rating.query.all()))]
+        }
+    }
+    return jsonify(response_object), 200
+
+
 @ratings_blueprint.route('/rate_vehicle', methods=['POST'])
 def rate_vehicle():
     print("Rating a vehicl")
@@ -171,7 +182,7 @@ def remove():
             status = requests.get("http://users:5001/authenticate/{0},{1}".format(email, password))
             data = status.json()
             if data['status'] == 'success':
-                print("Rating found")
+                print("Rating found ")
                 rating = db.session.query(Rating).filter_by(id=number).first()
                 # If the vehicle hasn't been rated yet or the only rating is from yourself
                 # and you are the one who created it: remove the vehicle

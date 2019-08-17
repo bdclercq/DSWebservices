@@ -102,7 +102,9 @@ def vehicle_details(number):
 @UI_blueprint.route('/Ratings', methods=['GET', 'POST'])
 def rating_management():
     vehicles = requests.get("http://vehicles:5004/vehicles")
-    return render_template("ratings.html", vehicles=vehicles.json()['data']['vehicles'])
+    ratings = requests.get("http://ratings:5002/ratings")
+    return render_template("ratings.html", vehicles=vehicles.json()['data']['vehicles'],
+                           ratings=ratings.json()['data']['ratings'])
 
 
 @UI_blueprint.route('/rate_vehicles', methods=['POST', 'GET'])

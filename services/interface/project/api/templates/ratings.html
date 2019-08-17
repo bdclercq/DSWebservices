@@ -9,8 +9,34 @@
                 {{ message }}<br>
             {% endif %}
             <br>
-        <a href="/rate_vehicles">Rate a vehicle</a><br>
-        <a href="/rate_stops">Rate a stop</a><br>
+            <div class="row">
+                <div class="col">
+                    <a href="/rate_vehicles">Rate a vehicle</a><br>
+                    <a href="/rate_stops">Rate a stop</a><br>
+                </div>
+                {% if ratings %}
+                    <div class="col" style="overflow-y: scroll; height:600px;">
+                        {% for record in ratings %}
+                            <li>
+                                {% if record['rating_type'] == 0 %}
+                                    Rating for vehicle:<br>
+                                {% elif record['rating_type'] == 1 %}
+                                    Rating for stop:<br>
+                                {% endif %}
+                                Rating for: {{ record['rating_for'] }}<br>
+                                Rated by: {{ record['rated_by'] }}<br>
+                                Rated score: {{ record['score'] }}<br>
+                                Reason for the rating: {{ record['description'] }}<br>
+                                <a href="/remove_ratings/{{ record['rating_for'] }}/{{ record['rating_type'] }}/{{ record['id'] }}">Remove
+                                    your rating</a><br>
+                            </li>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>No ratings!</p>
+                {% endif %}
+            </div>
+
             <hr>
             {% if vehicles %}
                 <ol>
@@ -26,6 +52,7 @@
             {% else %}
                 <p>No vehicles!</p>
             {% endif %}
+
         </div>
     </div>
 {% endblock %}
