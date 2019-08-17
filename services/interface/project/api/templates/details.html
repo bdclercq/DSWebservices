@@ -41,6 +41,11 @@
                                     {{ record['rated_by'] }}:<br>
                                     {{ record['score'] }}<br>
                                     {{ record['description'] }}<br>
+                                    {% if stop == True %}
+                                        <a href="/remove_ratings/{{ record['rating_for'] }}/1/{{ record['id'] }}">Remove your rating</a><br>
+                                    {% elif vehicle == True %}
+                                        <a href="/remove_ratings/{{ record['rating_for'] }}/0/{{ record['id'] }}">Remove your rating</a><br>
+                                    {% endif %}
                                 </li>
                             {% endfor %}
                         </div>

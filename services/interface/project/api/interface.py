@@ -146,6 +146,19 @@ def submit_rating():
     return render_template('index.html', message=result['message'])
 
 
+@UI_blueprint.route('/remove_ratings/<rfor>/<rtype>/<rid>', methods=['POST', 'GET'])
+def remove_ratings(rfor, rtype, rid):
+    return render_template('remove_rating.html', ratingid=rid, rfor=rfor, rtype=rtype)
+
+
+@UI_blueprint.route('/remove_rating', methods=['POST', 'GET'])
+def remove_rating():
+    result = request.form
+    status = requests.post("http://ratings:5002/ratings/remove", data=result)
+    result = status.json()
+    return render_template('index.html', message=result['message'])
+
+
 ################################################################
 
 
